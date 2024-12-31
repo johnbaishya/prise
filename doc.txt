@@ -1,0 +1,28 @@
+clockMe
+- site
+- user_site
+- user_site_schedule
+- clock
+
+task for clockme siteController
+- createSite ========
+- editSite ==========
+- deleteSite ==========
+- listMySites ============
+- getSiteDetail (only allowed if the user is appointed or has created the site)
+- only user owned company can be assigned to new site (done)
+- get sites by company id (done)
+
+task for company (done)
+task for clock (done)
+- start clock
+- end clock
+- start break
+- end break
+
+handling image
+- profile picture of user (done)
+- profile picture of company (done)
+- gallery of company (done)
+    - list gallery of company
+- gallery of site (done)
