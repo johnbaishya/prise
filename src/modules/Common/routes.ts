@@ -3,11 +3,13 @@ import verifyToken from "../../middleware/auth";
 import companyController from "./controller/companyController";
 import { ChangeUserProfilePicture, userLogin, userRegister } from "./controller/authController";
 import uploadImage from "../../middleware/uploadImage";
+import { testFunction } from "./controller/testController";
 
 
 const router = Router();
 
 // routes for user
+router.get("/",testFunction)
 router.post("/user/register",userRegister);
 router.post("/user/login",userLogin);
 router.post("/user/profile-pic",[verifyToken,uploadImage.single("image")],ChangeUserProfilePicture)
