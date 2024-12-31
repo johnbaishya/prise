@@ -2,6 +2,7 @@ import express, { Application, Request,Response } from "express";
 import appRoutes from "./routes";
 import connectDb from "./config/database";
 import initializeSwaggerDocumentation from "./config/initializeSwaggerDocumentation";
+import { testFunction } from "./modules/Common/controller/testController";
 
 // import errorHandler from './middleware/errorHandler';
 
@@ -22,6 +23,7 @@ app.use(function(req, res, next) {
 
 // Routes
 app.use('/api', appRoutes);
+app.get('/',testFunction)
 initializeSwaggerDocumentation(app);
 
 // Global Error Handler
