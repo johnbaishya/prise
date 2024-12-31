@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon src/server.ts",
-    "start": "node dist/server.js",
+    "dev": "nodemon src/index.ts",
+    "start": "node api/index.js",
     "build":"tsc"
   },
   "keywords": [],
