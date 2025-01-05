@@ -5,6 +5,7 @@ import { DeleteObjectCommand } from "@aws-sdk/client-s3"
 import s3Config from "../config/s3Config";
 
 console.log("region",process.env.AWS_REGION)
+console.log("bucket",process.env.AWS_S3_BUCKET_NAME)
 // const s3 = new S3Client({
 //     region:process.env.AWS_REGION,
 //     endpoint:process.env.AWS_REGION_ENDPOINT    ,
