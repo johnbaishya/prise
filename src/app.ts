@@ -3,6 +3,7 @@ import appRoutes from "./routes";
 import connectDb from "./config/database";
 import initializeSwaggerDocumentation from "./config/initializeSwaggerDocumentation";
 import { testFunction } from "./modules/Common/controller/testController";
+import bodyParser from "body-parser";
 
 // import errorHandler from './middleware/errorHandler';
 
@@ -10,8 +11,9 @@ connectDb();
 const app: Application = express();
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({extended:false}))
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:4001');
     res.header(

@@ -20,6 +20,7 @@ import { MulterImageFile } from "../types/FileTypes";
 
 // for register=======================================================================================================
 export const userRegister = async(req:Request, res:Response)=>{
+  console.log("inside user register function");
      // Our register logic starts here
      try {
         // Get user input

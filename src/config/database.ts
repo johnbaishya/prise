@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const { MONGO_URI } = process.env;
 
 const connectDb = () => {
+  console.log("inside connect db",MONGO_URI)
 
   // Connecting to the database
   mongoose
@@ -12,7 +13,7 @@ const connectDb = () => {
     //   useCreateIndex: true,
     //   useFindAndModify: false,
     })
-    .then(() => {
+    .then((res) => {
       console.log("Successfully connected to database");
     })
     .catch((error) => {

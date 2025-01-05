@@ -19,6 +19,7 @@ const auth_1 = require("../../../libs/auth");
 const reqres_1 = require("../../../libs/reqres");
 // for register=======================================================================================================
 const userRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("inside user register function");
     // Our register logic starts here
     try {
         // Get user input
