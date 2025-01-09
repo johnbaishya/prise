@@ -22,18 +22,18 @@ Follow these steps to get the project up and running on your local machine:
 
 ### **Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/prise.git
-Install Dependencies
+git clone https://github.com/johnbaishya/prise.git
+```
+### **Install Dependencies**
 Navigate to the project directory and install required packages:
 
-bash
-Copy code
+```bash
 npm install
-Setup Environment Variables
+```
+### **Setup Environment Variables (for local environment)**
 Create a .env file in the root directory and configure the required environment variables. Example:
 
-env
-Copy code
+```bash
 PORT=3000
 MONGO_URI=<your_mongodb_connection_string>
 AWS_ACCESS_KEY_ID=<your_aws_access_key>
@@ -41,48 +41,48 @@ AWS_SECRET_ACCESS_KEY=<your_aws_secret_key>
 AWS_REGION=<your_aws_region>
 S3_BUCKET_NAME=<your_s3_bucket_name>
 JWT_SECRET=<your_jwt_secret>
-Deployment
+```
+## **Deployment**
 Prise is configured to be hosted on Vercel for seamless deployment and scalability. Ensure all environment variables are set in the Vercel dashboard.
 
-Available Modules
-ClockMe
+## **Available Modules**
+### **ClockMe**
 A module for managing employee attendance by enabling clock-in and clock-out functionality.
 
-API Documentation for ClockMe
-Login API
+## *API Documentation for ClockMe*
+### Login API
 
-URI: /api/clockme/login
-Method: POST
-Request Body:
-json
-Copy code
+* URI: **/api/user/login**
+* Method: **POST**
+* Request Body:
+```
 {
   "email": "user@example.com",
   "password": "password123"
 }
-Register API
-
-URI: /api/clockme/register
-Method: POST
-Request Body:
-json
-Copy code
+```
+### Register API
+* URI: **/api/user/register**
+* Method: **POST**
+* Request Body:
+```
 {
   "name": "John Doe",
   "email": "user@example.com",
   "password": "password123"
 }
+```
 ... (Add documentation for other APIs in this module and future modules.)
 
-Contributing
+## Contributing
 We welcome contributions from the community! Whether you want to fix a bug, add a feature, or enhance documentation, feel free to:
 
-Fork this repository.
-Create a feature branch: git checkout -b feature-name.
-Commit your changes: git commit -m "Add new feature".
-Push the branch: git push origin feature-name.
-Open a pull request.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+- Fork this repository.
+- Create a feature branch: ```git checkout -b feature-name.```
+- Commit your changes: ```git commit -m "Add new feature"```.
+- Push the branch: ```git push origin feature-name.```
+- Open a pull request.
+## License
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
 
 Feel free to clone, contribute, or use this project!
