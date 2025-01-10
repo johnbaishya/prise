@@ -10,18 +10,20 @@ import swaggerSpec from "./swagger";
 // const PORT = config.port || 3000;
 const PORT = process.env.API_PORT||3000;
 
-// Start the Express server
-// uncomment this code while running in local-------------------
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-// ----------------------------------------------------------
-
 const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec,{
   customCssUrl: CSS_URL
 }))
+
+// Start the Express server
+// uncomment this code while running in local-------------------
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// });
+// ----------------------------------------------------------
+
+
 
 // Graceful shutdown
 process.on('SIGTERM', () => {

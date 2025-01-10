@@ -11,7 +11,6 @@ const router  = Router();
 router.use("/clockme",verifyToken,clockMeRoutes)
 router.use("/getmeal",getMealRoutes )
 router.use("/",commonRoutes)
-router.use("/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 
 const appRoutes = router;
 export default appRoutes;
