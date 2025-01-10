@@ -8,6 +8,12 @@ const options:Options = {
       version: "1.0.0",
       description: "REST API documentation for the Prise project."
     },
+    servers: [
+      {
+        url: "https://prise.vercel.app/",
+        description: "My API Documentation",
+      },
+    ],
     tags:[
       {
         name:"Common",
@@ -19,7 +25,7 @@ const options:Options = {
         description:"For tracking the working hours of employee and managing human resource to work sites."
       }
     ],
-    host: "https://prise.vercel.app",
+    host: "https://prise.vercel.app/",
     basePath: "/api", // Define the base path for your API
     schemes: ["http", "https"], // Supported schemes
   },
