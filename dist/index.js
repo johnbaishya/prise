@@ -16,11 +16,7 @@ app_1.default.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 // ----------------------------------------------------------
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-app_1.default.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default, {
-    customCss: '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
-    customCssUrl: CSS_URL,
-}));
+app_1.default.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 // Graceful shutdown
 process.on('SIGTERM', () => {
     console.log('SIGTERM signal received. Closing HTTP server...');
