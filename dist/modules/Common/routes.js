@@ -10,11 +10,15 @@ const authController_1 = require("./controller/authController");
 const uploadImage_1 = __importDefault(require("../../middleware/uploadImage"));
 const testController_1 = require("./controller/testController");
 const router = (0, express_1.Router)();
+// route to check if token is valid 
+router.get("/user/verify-token", auth_1.default, authController_1.verifyAuthentication);
 // routes for user
 router.get("/", testController_1.testFunction);
 router.post("/user/register", authController_1.userRegister);
 router.post("/user/login", authController_1.userLogin);
 router.post("/user/profile-pic", [auth_1.default, uploadImage_1.default.single("image")], authController_1.ChangeUserProfilePicture);
+router.put("/user/profile", auth_1.default, authController_1.updateUser);
+router.get("/user/profile", auth_1.default, authController_1.getUser);
 // routes for company
 router.post("/company", auth_1.default, companyController_1.default.addCompany);
 router.get("/company", auth_1.default, companyController_1.default.listMyCompanies);

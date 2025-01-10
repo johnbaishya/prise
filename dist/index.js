@@ -5,13 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const app_1 = __importDefault(require("./app"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = __importDefault(require("./swagger"));
 // import config from './config';
 // const PORT = config.port || 3000;
 const PORT = process.env.API_PORT || 3000;
 // Start the Express server
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
+// uncomment this code while running in local-------------------
+app_1.default.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
+// ----------------------------------------------------------
+app_1.default.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 // Graceful shutdown
 process.on('SIGTERM', () => {
     console.log('SIGTERM signal received. Closing HTTP server...');

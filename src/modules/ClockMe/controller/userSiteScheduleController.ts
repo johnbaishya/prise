@@ -22,7 +22,51 @@ post bosy structure is
  */
 
 
-
+//  to create a schedule
+/**
+ * @swagger
+ * /api/clockme/schedule:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Create Schedule
+ *     description: create a schedule for a user (worker) to work at a certain site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               clock_me_user_site_assigned_id:
+ *                 type: string
+ *               time_Schedule:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     clock_in:
+ *                       type: string
+ *                       format: date-time
+ *                     clock_out:
+ *                       type: string
+ *                       format: date-time
+ *                     break_duration:
+ *                       type: number
+ *                       description: Duration in minutes.
+ *             required:
+ *               - clock_me_user_site_assigned_id
+ *               - time_Schedule
+ *     responses:
+ *       200:
+ *         description: Schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const createSchedule = async(req:UserRequest,res:Response)=>{
     try {
         let body:CreateScheduleRequestBody = req.body;
@@ -60,6 +104,7 @@ export const createSchedule = async(req:UserRequest,res:Response)=>{
     }
 }
 
+// to check if a user is the creator of a schedule
 const checkIsSchedculeCreator = async(req:UserRequest,res:Response,schedule:any):Promise<boolean>=>{
     try {
         // let scheduleId = req.params.id;
@@ -99,6 +144,49 @@ const checkIsSchedculeCreator = async(req:UserRequest,res:Response,schedule:any)
     }
 }
 
+
+//  to update a schedule
+/**
+ * @swagger
+ * /api/clockme/schedule/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: update Schedule
+ *     description: update a schedule.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               time_Schedule:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     clock_in:
+ *                       type: string
+ *                       format: date-time
+ *                     clock_out:
+ *                       type: string
+ *                       format: date-time
+ *                     break_duration:
+ *                       type: number
+ *                       description: Duration in minutes.
+ *             required:
+ *               - time_Schedule
+ *     responses:
+ *       200:
+ *         description: updated schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const updateSchedule = async(req:UserRequest,res:Response)=>{
     try {
         let scheduleId = req.params.id;
@@ -144,6 +232,25 @@ export const updateSchedule = async(req:UserRequest,res:Response)=>{
 
 
 
+//  get sxhedules by user site assign Id
+/**
+ * @swagger
+ * /api/clockme/user-site-assign/:id/schedule:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get Schedules by user site assign id
+ *     description: get Schedules by user site assign id
+ *     responses:
+ *       200:
+ *         description: schedule[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getScheduleByUserSiteAssign = async(req:UserRequest,res:Response)=>{
     // need to make it (only be accessible by site owner and assigned user) for later
     try {
@@ -162,6 +269,25 @@ export const getScheduleByUserSiteAssign = async(req:UserRequest,res:Response)=>
 }
 
 
+//  to get schedule detail
+/**
+ * @swagger
+ * /api/clockme/schedule/:id:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get Schedule details
+ *     description: get details of a certain schedule
+ *     responses:
+ *       200:
+ *         description: schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getScheduleDetail = async(req:UserRequest,res:Response)=>{
     try {
         let scheduleId = req.params.id;
@@ -178,6 +304,25 @@ export const getScheduleDetail = async(req:UserRequest,res:Response)=>{
 }
 
 
+//  to delete a schedule
+/**
+ * @swagger
+ * /api/clockme/schedule/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: delete Schedule 
+ *     description: delete a certain schedule
+ *     responses:
+ *       200:
+ *         description: schedule deleted successfully.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const deleteSchedule = async(req:UserRequest,res:Response)=>{
     try {
         let scheduleId = req.params.id;

@@ -1,18 +1,23 @@
 import { Router } from "express";
 import verifyToken from "../../middleware/auth";
 import companyController from "./controller/companyController";
-import { ChangeUserProfilePicture, userLogin, userRegister } from "./controller/authController";
+import { ChangeUserProfilePicture, getUser, updateUser, userLogin, userRegister, verifyAuthentication } from "./controller/authController";
 import uploadImage from "../../middleware/uploadImage";
 import { testFunction } from "./controller/testController";
 
 
 const router = Router();
 
+// route to check if token is valid 
+router.get("/user/verify-token",verifyToken,verifyAuthentication);
+
 // routes for user
 router.get("/",testFunction)
 router.post("/user/register",userRegister);
 router.post("/user/login",userLogin);
 router.post("/user/profile-pic",[verifyToken,uploadImage.single("image")],ChangeUserProfilePicture)
+router.put("/user/profile",verifyToken,updateUser)
+router.get("/user/profile",verifyToken,getUser)
 
 
 // routes for company

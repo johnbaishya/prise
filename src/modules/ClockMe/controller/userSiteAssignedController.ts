@@ -7,7 +7,46 @@ import User from "../../Common/model/User";
 import { sendErrorResponse } from "../../../libs/reqres";
 
 
-
+//  to assign a site to a user
+/**
+ * @swagger
+ * /api/clockme/user-site-assign:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Assign User to a Site
+ *     description: assign a user to a certain site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *               clock_me_site_id:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive
+ *                   - cancelled
+ *                   - completed
+ *             required:
+ *               - user_id
+ *               - clock_me_site_id
+ *     responses:
+ *       200:
+ *         description: assigned user site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const assignUserToSite = async(req:UserRequest,res:Response)=>{
     try {
         let siteId = req.body.clock_me_site_id;
@@ -36,6 +75,41 @@ export const assignUserToSite = async(req:UserRequest,res:Response)=>{
 
 
 
+//  to update a user site assign
+/**
+ * @swagger
+ * /api/clockme/user-site-assign/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Update user site assign
+ *     description: update user site assign.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive
+ *                   - cancelled
+ *                   - completed
+ *             required:
+ *               - status
+ *     responses:
+ *       200:
+ *         description: updated assigned user site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const updateUserSiteStatus = async(req:UserRequest,res:Response)=>{
     try {
         let userSiteId = req.params.id;
@@ -60,7 +134,25 @@ export const updateUserSiteStatus = async(req:UserRequest,res:Response)=>{
 
 
 
-
+//  to delete a user site assign
+/**
+ * @swagger
+ * /api/clockme/user-site-assign/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: delete user site assign
+ *     description: delete a user site assign.
+ *     responses:
+ *       200:
+ *         description:  user site assign deleted.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const deleteUserSiteAssigned = async(req:UserRequest,res:Response)=>{
     try {
         let userSiteId = req.params.id;
@@ -82,6 +174,25 @@ export const deleteUserSiteAssigned = async(req:UserRequest,res:Response)=>{
 }
 
 
+//  to get user site assign of the current user
+/**
+ * @swagger
+ * /api/clockme/user-site-assign:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get user sites assigned
+ *     description: get all user site assigned of current user.
+ *     responses:
+ *       200:
+ *         description: assigned user site[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getSitesAssigned = async(req:UserRequest,res:Response)=>{
     try {
         let user_id = req.user?.id;
@@ -109,6 +220,25 @@ export const getSitesAssigned = async(req:UserRequest,res:Response)=>{
 }
 
 
+//  to get user site assign of certain site
+/**
+ * @swagger
+ * /api/clockme/site/:id/user-site-assign:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get user sites assigned by site
+ *     description: get all user site assigned of a certain site.
+ *     responses:
+ *       200:
+ *         description: assigned user site[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getSiteAssignedBySiteId = async(req:UserRequest,res:Response)=>{
     try {
         let siteId = req.params.id;

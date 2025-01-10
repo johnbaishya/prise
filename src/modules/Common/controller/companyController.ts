@@ -11,6 +11,51 @@ import { deleteS3Image } from "../../../services/ImageHandler";
 
 
 // to create a company
+/**
+ * @swagger
+ * /api/company:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: Add Company
+ *     description: create a new company.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 required: true
+ *               description:
+ *                 type: string
+ *               email: 
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               lat:
+ *                 type: string
+ *               lon: 
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *             required:
+ *               - name
+ *               - category
+ *     responses:
+ *       200:
+ *         description: created company.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const addCompany = async(req:UserRequest, res:Response)=>{
     let userId = req.user?.id;
     try {
@@ -23,6 +68,47 @@ export const addCompany = async(req:UserRequest, res:Response)=>{
 }
 
 // to edit a company 
+/**
+ * @swagger
+ * /api/company/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: update Company
+ *     description: update a company.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               email: 
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               lat:
+ *                 type: string
+ *               lon: 
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: updated company.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const updateCompany  = async(req:UserRequest,res:Response)=>{
     try{
         let companyId = req.params.id;
@@ -44,6 +130,25 @@ export const updateCompany  = async(req:UserRequest,res:Response)=>{
 }
 
 // to delete a company 
+// to edit a company 
+/**
+ * @swagger
+ * /api/company/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: delete Company
+ *     description: remove a company.
+ *     responses:
+ *       200:
+ *         description: company deleted successsfully.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const deleteCompany  = async(req:UserRequest,res:Response)=>{
     try{
         let companyId = req.params.id;
@@ -65,6 +170,25 @@ export const deleteCompany  = async(req:UserRequest,res:Response)=>{
 }
 
 // to list the sites created by user
+// to edit a company 
+/**
+ * @swagger
+ * /api/company:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: list Company
+ *     description: list all the companies created by user.
+ *     responses:
+ *       200:
+ *         description: company[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const listMyCompanies = async(req:UserRequest,res:Response)=>{
     try {
         let userId = req.user?.id;
@@ -79,6 +203,25 @@ export const listMyCompanies = async(req:UserRequest,res:Response)=>{
 
 
 // to get the detail of a certain company
+// to edit a company 
+/**
+ * @swagger
+ * /api/company/:id:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: get Company detail
+ *     description: get the description of the company.
+ *     responses:
+ *       200:
+ *         description: company.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getCompanyDetail = async(req:UserRequest,res:Response)=>{
     try {
         let companyId = req.params.id;
@@ -96,6 +239,37 @@ export const getCompanyDetail = async(req:UserRequest,res:Response)=>{
 
 
 // function to add gallery images to a Company
+// to edit a company 
+/**
+ * @swagger
+ * /api/company/:id/gallery:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: add Company Gallery
+ *     description: Add images to gallery of company.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: gallery[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 const addCompanyGallery = async(req:UserRequest,res:Response)=>{
     try {
         let companyId = req.params.id
@@ -149,7 +323,25 @@ const addCompanyGallery = async(req:UserRequest,res:Response)=>{
 }
 
 
-
+//  to delete the company gallery
+/**
+ * @swagger
+ * /api/company/gallery/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: delete Company gallery 
+ *     description: delete an image from the company gallery
+ *     responses:
+ *       200:
+ *         description: image deleted successfully.
+ *       401:
+ *         description: unauthorized.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 const deleteCompanyGalleryImage = async(req:UserRequest,res:Response)=>{
     try {
         let imageKey = req.params.id;
@@ -185,7 +377,25 @@ const deleteCompanyGalleryImage = async(req:UserRequest,res:Response)=>{
 
 
 
-
+// to get the gallery of company
+/**
+ * @swagger
+ * /api/company/:id/gallery:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: get Company gallery
+ *     description: get all the images of company's gallery.
+ *     responses:
+ *       200:
+ *         description: gallery[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 const getCompanyGallery = async(req:UserRequest,res:Response)=>{
     try {
         let companyId = req.params.id;
@@ -207,6 +417,33 @@ const getCompanyGallery = async(req:UserRequest,res:Response)=>{
 }
 
 
+// to change the profile picture of a company
+/**
+ * @swagger
+ * /api/company/:id/profile-pic:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: Company profile picture update
+ *     description: update the Company's profile picture.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary # Indicates file upload in Swagger
+ *     responses:
+ *       200:
+ *         description: updated user.
+ *       401:
+ *         description: Invalid credentials.
+ *     
+ */
 const ChangeCompanyProfilePicture = async(req:UserRequest,res:Response) =>{
     try {
       let userId = req.user?.id;

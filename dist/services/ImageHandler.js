@@ -17,8 +17,6 @@ const multer_1 = __importDefault(require("multer"));
 const multer_s3_1 = __importDefault(require("multer-s3"));
 const client_s3_1 = require("@aws-sdk/client-s3");
 const s3Config_1 = __importDefault(require("../config/s3Config"));
-console.log("region", process.env.AWS_REGION);
-console.log("bucket", process.env.AWS_S3_BUCKET_NAME);
 // const s3 = new S3Client({
 //     region:process.env.AWS_REGION,
 //     endpoint:process.env.AWS_REGION_ENDPOINT    ,
@@ -38,7 +36,6 @@ exports.uploadImage = (0, multer_1.default)({
             cb(null, { fieldName: file.fieldname });
         },
         key: function (req, file, cb) {
-            console.log("here", file);
             cb(null, Date.now().toString() + file.originalname);
         },
     })

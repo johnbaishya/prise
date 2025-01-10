@@ -17,7 +17,6 @@ const uploadImage = (0, multer_1.default)({
             cb(null, { fieldName: file.fieldname });
         },
         key: function (req, file, cb) {
-            console.log("here", file);
             cb(null, Date.now().toString() + file.originalname);
         },
     })

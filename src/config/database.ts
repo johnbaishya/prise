@@ -3,8 +3,6 @@ import mongoose from "mongoose";
 const { MONGO_URI } = process.env;
 
 const connectDb = () => {
-  console.log("inside connect db",MONGO_URI)
-
   // Connecting to the database
   mongoose
     .connect(MONGO_URI as string, {

@@ -29,6 +29,51 @@ post bosy structure is
     },{...}]
 }
  */
+//  to create a schedule
+/**
+ * @swagger
+ * /api/clockme/schedule:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Create Schedule
+ *     description: create a schedule for a user (worker) to work at a certain site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               clock_me_user_site_assigned_id:
+ *                 type: string
+ *               time_Schedule:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     clock_in:
+ *                       type: string
+ *                       format: date-time
+ *                     clock_out:
+ *                       type: string
+ *                       format: date-time
+ *                     break_duration:
+ *                       type: number
+ *                       description: Duration in minutes.
+ *             required:
+ *               - clock_me_user_site_assigned_id
+ *               - time_Schedule
+ *     responses:
+ *       200:
+ *         description: Schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const createSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let body = req.body;
@@ -65,6 +110,7 @@ const createSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.createSchedule = createSchedule;
+// to check if a user is the creator of a schedule
 const checkIsSchedculeCreator = (req, res, schedule) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // let scheduleId = req.params.id;
@@ -101,6 +147,48 @@ const checkIsSchedculeCreator = (req, res, schedule) => __awaiter(void 0, void 0
         return false;
     }
 });
+//  to update a schedule
+/**
+ * @swagger
+ * /api/clockme/schedule/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: update Schedule
+ *     description: update a schedule.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               time_Schedule:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     clock_in:
+ *                       type: string
+ *                       format: date-time
+ *                     clock_out:
+ *                       type: string
+ *                       format: date-time
+ *                     break_duration:
+ *                       type: number
+ *                       description: Duration in minutes.
+ *             required:
+ *               - time_Schedule
+ *     responses:
+ *       200:
+ *         description: updated schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const updateSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let scheduleId = req.params.id;
@@ -142,6 +230,25 @@ const updateSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.updateSchedule = updateSchedule;
+//  get sxhedules by user site assign Id
+/**
+ * @swagger
+ * /api/clockme/user-site-assign/:id/schedule:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get Schedules by user site assign id
+ *     description: get Schedules by user site assign id
+ *     responses:
+ *       200:
+ *         description: schedule[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const getScheduleByUserSiteAssign = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // need to make it (only be accessible by site owner and assigned user) for later
     try {
@@ -160,6 +267,25 @@ const getScheduleByUserSiteAssign = (req, res) => __awaiter(void 0, void 0, void
     }
 });
 exports.getScheduleByUserSiteAssign = getScheduleByUserSiteAssign;
+//  to get schedule detail
+/**
+ * @swagger
+ * /api/clockme/schedule/:id:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get Schedule details
+ *     description: get details of a certain schedule
+ *     responses:
+ *       200:
+ *         description: schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const getScheduleDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let scheduleId = req.params.id;
@@ -176,6 +302,25 @@ const getScheduleDetail = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getScheduleDetail = getScheduleDetail;
+//  to delete a schedule
+/**
+ * @swagger
+ * /api/clockme/schedule/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: delete Schedule
+ *     description: delete a certain schedule
+ *     responses:
+ *       200:
+ *         description: schedule deleted successfully.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const deleteSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let scheduleId = req.params.id;

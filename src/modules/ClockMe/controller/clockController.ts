@@ -8,6 +8,9 @@ import { UpdateClockRequestBody } from "../types/reqBodyTypes";
 import { clockStatusEnum, updateClockActionEnum } from "../types/enums";
 
 
+// to check if a user is already has a running clock. 
+// in other words if user is currently working. 
+// user has clocked in but hasnt clocked out yet. 
 export const checkUserHasRunningClock = async(req:UserRequest,res:Response)=>{
     try {
         let user_id = req.user?.id;
@@ -28,6 +31,26 @@ export const checkUserHasRunningClock = async(req:UserRequest,res:Response)=>{
 }
 
 
+// for starting a new clock for a user. 
+// for creating a clock.
+// this methods executes when a user clock_in on a working site
+/**
+ * @swagger
+ * /api/clockme/site/:id/clock-in:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: clock_in 
+ *     description: api for when user clock_in at a working site. it creates a new clock entry
+ *     responses:
+ *       201:
+ *         description: Clock Started .
+ *       500:
+ *         description: some error.
+ *       401:
+ *         description: unauthorized
+ */
 export const startClock = async(req:UserRequest,res:Response)=>{
     try {
         // cheking if user has already started and not ended any other clock (onGoing clock / running clock);
@@ -53,6 +76,38 @@ export const startClock = async(req:UserRequest,res:Response)=>{
 
 
 
+//  to update a clock
+/**
+ * @swagger
+ * /api/clockme/clock/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: update a clock
+ *     description: create a schedule for a user (worker) to work at a certain site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum:
+ *                   - clock_out
+ *                   - break_start
+ *                   - break_end
+ *     responses:
+ *       200:
+ *         description: Schedule.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const updateClock = async(req:UserRequest,res:Response)=>{
     try {
         let userId = req.user?.id;

@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const { MONGO_URI } = process.env;
 const connectDb = () => {
-    console.log("inside connect db", MONGO_URI);
     // Connecting to the database
     mongoose_1.default
         .connect(MONGO_URI, {

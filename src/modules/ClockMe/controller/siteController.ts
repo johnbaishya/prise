@@ -10,7 +10,44 @@ import Gallery from "../../Common/model/Gallery";
 import { deleteS3Image } from "../../../services/ImageHandler";
 
 
-
+//  to add a site
+/**
+ * @swagger
+ * /api/clockme/site:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Add Site
+ *     description: create a new site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               company_id:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               lat:
+ *                 type: string
+ *               lon: 
+ *                 type: string
+ *             required:
+ *               - address
+ *     responses:
+ *       200:
+ *         description: created Site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const addSite = async(req:UserRequest,res:Response)=>{
     try {
         let user = req.user!;
@@ -42,6 +79,41 @@ export const addSite = async(req:UserRequest,res:Response)=>{
 
 
 
+// to update the site
+/**
+ * @swagger
+ * /api/clockme/site/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Update Site
+ *     description: update the site.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               company_id:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               lat:
+ *                 type: string
+ *               lon: 
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: updated Site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const updateSite = async(req:UserRequest,res:Response)=>{
     try{
         // let user = req.user;
@@ -65,7 +137,25 @@ export const updateSite = async(req:UserRequest,res:Response)=>{
     }
 }
 
-
+// to delete the site
+/**
+ * @swagger
+ * /api/clockme/site/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Delete Site
+ *     description: delete the site.
+ *     responses:
+ *       200:
+ *         description: created Site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const deleteSite = async(req:UserRequest,res:Response)=>{
     try{
         // let user = req.user;
@@ -89,6 +179,26 @@ export const deleteSite = async(req:UserRequest,res:Response)=>{
 }
 
 
+
+// to get the user's sites
+/**
+ * @swagger
+ * /api/clockme/site:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Get user Sites
+ *     description: to get all the sites created by current user.
+ *     responses:
+ *       200:
+ *         description: site[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getMySites = async(req:UserRequest,res:Response)=>{
     try {
         let user_id = req.user?.id
@@ -101,6 +211,26 @@ export const getMySites = async(req:UserRequest,res:Response)=>{
     }
 }
 
+
+// to get the detail of a site
+/**
+ * @swagger
+ * /api/clockme/site/:id:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Get Site Detail
+ *     description: to get the details of a site.
+ *     responses:
+ *       200:
+ *         description: site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getSiteDetail = async(req:UserRequest,res:Response)=>{
     try {
         let siteId = req.params.id
@@ -117,6 +247,25 @@ export const getSiteDetail = async(req:UserRequest,res:Response)=>{
 }
 
 
+// to get all the sites of a certain Company
+/**
+ * @swagger
+ * /api/clockme/company/:id/site:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Get Sites by Company
+ *     description: to get all the sites of a certain company.
+ *     responses:
+ *       200:
+ *         description: site[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getsitesByCompanyId = async(req:UserRequest,res:Response)=>{
     try {
         let companyId = req.params.id;
@@ -140,6 +289,37 @@ export const getsitesByCompanyId = async(req:UserRequest,res:Response)=>{
 
 
 
+// function to add gallery images of a site
+/**
+ * @swagger
+ * /api/clockme/site/:id/gallery:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: add site Gallery
+ *     description: Add images to gallery of site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: gallery[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const addSiteGallery = async(req:UserRequest,res:Response)=>{
     try {
         let siteId = req.params.id
@@ -194,6 +374,25 @@ export const addSiteGallery = async(req:UserRequest,res:Response)=>{
 
 
 
+//  to delete the site gallery
+/**
+ * @swagger
+ * /api/clockme/site/gallery/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: delete site gallery 
+ *     description: delete an image from the site's gallery
+ *     responses:
+ *       200:
+ *         description: image deleted successfully.
+ *       401:
+ *         description: unauthorized.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const deleteSiteGalleryImage = async(req:UserRequest,res:Response)=>{
     try {
         let imageKey = req.params.id;
@@ -228,7 +427,25 @@ export const deleteSiteGalleryImage = async(req:UserRequest,res:Response)=>{
 }
 
 
-
+// to get the gallery of site
+/**
+ * @swagger
+ * /api/clockme/site/:id/gallery:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get Site's gallery
+ *     description: get all the images of site's gallery.
+ *     responses:
+ *       200:
+ *         description: gallery[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *     
+ */
 export const getSiteGallery = async(req:UserRequest,res:Response)=>{
     try {
         let siteId = req.params.id;

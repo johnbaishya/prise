@@ -20,6 +20,44 @@ const reqres_1 = require("../../../libs/reqres");
 const EntityEnum_1 = require("../../Common/types/EntityEnum");
 const Gallery_1 = __importDefault(require("../../Common/model/Gallery"));
 const ImageHandler_1 = require("../../../services/ImageHandler");
+//  to add a site
+/**
+ * @swagger
+ * /api/clockme/site:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Add Site
+ *     description: create a new site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               company_id:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               lat:
+ *                 type: string
+ *               lon:
+ *                 type: string
+ *             required:
+ *               - address
+ *     responses:
+ *       200:
+ *         description: created Site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const addSite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let user = req.user;
@@ -49,6 +87,41 @@ const addSite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.addSite = addSite;
+// to update the site
+/**
+ * @swagger
+ * /api/clockme/site/:id:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Update Site
+ *     description: update the site.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               company_id:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               lat:
+ *                 type: string
+ *               lon:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: updated Site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const updateSite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // let user = req.user;
@@ -73,6 +146,25 @@ const updateSite = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateSite = updateSite;
+// to delete the site
+/**
+ * @swagger
+ * /api/clockme/site/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Delete Site
+ *     description: delete the site.
+ *     responses:
+ *       200:
+ *         description: created Site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const deleteSite = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // let user = req.user;
@@ -96,6 +188,25 @@ const deleteSite = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteSite = deleteSite;
+// to get the user's sites
+/**
+ * @swagger
+ * /api/clockme/site:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Get user Sites
+ *     description: to get all the sites created by current user.
+ *     responses:
+ *       200:
+ *         description: site[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const getMySites = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -110,6 +221,25 @@ const getMySites = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getMySites = getMySites;
+// to get the detail of a site
+/**
+ * @swagger
+ * /api/clockme/site/:id:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Get Site Detail
+ *     description: to get the details of a site.
+ *     responses:
+ *       200:
+ *         description: site.
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const getSiteDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let siteId = req.params.id;
@@ -127,6 +257,25 @@ const getSiteDetail = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getSiteDetail = getSiteDetail;
+// to get all the sites of a certain Company
+/**
+ * @swagger
+ * /api/clockme/company/:id/site:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: Get Sites by Company
+ *     description: to get all the sites of a certain company.
+ *     responses:
+ *       200:
+ *         description: site[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const getsitesByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let companyId = req.params.id;
@@ -150,6 +299,37 @@ const getsitesByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getsitesByCompanyId = getsitesByCompanyId;
+// function to add gallery images of a site
+/**
+ * @swagger
+ * /api/clockme/site/:id/gallery:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: add site Gallery
+ *     description: Add images to gallery of site.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: gallery[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const addSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let siteId = req.params.id;
@@ -198,6 +378,25 @@ const addSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.addSiteGallery = addSiteGallery;
+//  to delete the site gallery
+/**
+ * @swagger
+ * /api/clockme/site/gallery/:id:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: delete site gallery
+ *     description: delete an image from the site's gallery
+ *     responses:
+ *       200:
+ *         description: image deleted successfully.
+ *       401:
+ *         description: unauthorized.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const deleteSiteGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let imageKey = req.params.id;
@@ -230,6 +429,25 @@ const deleteSiteGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.deleteSiteGalleryImage = deleteSiteGalleryImage;
+// to get the gallery of site
+/**
+ * @swagger
+ * /api/clockme/site/:id/gallery:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [ClockMe]
+ *     summary: get Site's gallery
+ *     description: get all the images of site's gallery.
+ *     responses:
+ *       200:
+ *         description: gallery[].
+ *       401:
+ *         description: Invalid credentials.
+ *       500:
+ *         description: something wrong
+ *
+ */
 const getSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let siteId = req.params.id;

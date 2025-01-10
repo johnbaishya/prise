@@ -9,6 +9,7 @@ const userSiteAssignedController_1 = require("./controller/userSiteAssignedContr
 const userSiteScheduleController_1 = require("./controller/userSiteScheduleController");
 const testController_1 = require("./controller/testController");
 const uploadImage_1 = __importDefault(require("../../middleware/uploadImage"));
+const clockController_1 = require("./controller/clockController");
 const router = (0, express_1.Router)();
 // routes for sites
 router.get("/site", siteController_1.getMySites);
@@ -32,6 +33,9 @@ router.get("/user-site-assign/:id/schedule", userSiteScheduleController_1.getSch
 router.get("/schedule/:id", userSiteScheduleController_1.getScheduleDetail);
 router.put("/schedule/:id", userSiteScheduleController_1.updateSchedule);
 router.delete("/schedule/:id", userSiteScheduleController_1.deleteSchedule);
+// routes for clock
+router.get("/site/:id/clock-in", clockController_1.startClock);
+router.put("/clock/:id", clockController_1.updateClock);
 // teting routes
 router.post("/test", uploadImage_1.default.single("image"), testController_1.test1);
 const clockMeRoutes = router;

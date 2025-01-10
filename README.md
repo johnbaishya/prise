@@ -42,6 +42,39 @@ AWS_REGION=<your_aws_region>
 S3_BUCKET_NAME=<your_s3_bucket_name>
 JWT_SECRET=<your_jwt_secret>
 ```
+### **src/index.ts**
+in src/index.ts file add the following code to start the express server.
+``` 
+import "dotenv/config";
+import app from './app';
+....
+.......
+// const PORT = config.port || 3000;
+const PORT = process.env.API_PORT||3000;
+
+// Start the Express server
+// add this lines of code while running in local----------------------------------
+
+app.listen(PORT, () => {
+   console.log(`Server running on http://localhost:${PORT}`);
+});
+
+// ----------------------------------------------------------------------------
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received. Closing HTTP server...');
+  process.exit(0);
+});
+```
+### **Running in Dev Mode**
+execute the following command in the root of the project
+
+```npm run dev ```
+### **Build the project**
+```npm run build```
+### **Run the project** 
+```npm run start```
 ## **Deployment**
 Prise is configured to be hosted on Vercel for seamless deployment and scalability. Ensure all environment variables are set in the Vercel dashboard.
 
@@ -49,11 +82,10 @@ Prise is configured to be hosted on Vercel for seamless deployment and scalabili
 ### **ClockMe**
 A module for managing employee attendance by enabling clock-in and clock-out functionality.
 
-## *API Documentation for ClockMe*
+## API Documentation
 ### Login API
-
-* URI: **/api/user/login**
-* Method: **POST**
+* URI: ```/api/user/login```
+* Method: ```POST```
 * Request Body:
 ```
 {
@@ -62,17 +94,18 @@ A module for managing employee attendance by enabling clock-in and clock-out fun
 }
 ```
 ### Register API
-* URI: **/api/user/register**
-* Method: **POST**
+* URI: ```/api/user/register```
+* Method: ```POST```
 * Request Body:
 ```
 {
-  "name": "John Doe",
+  "first_name": "John ",
+  "last_name": "Doe",
   "email": "user@example.com",
   "password": "password123"
 }
 ```
-... (Add documentation for other APIs in this module and future modules.)
+find full [REST API Documentation ](https://prise.vercel.app/api-docs/) here
 
 ## Contributing
 We welcome contributions from the community! Whether you want to fix a bug, add a feature, or enhance documentation, feel free to:

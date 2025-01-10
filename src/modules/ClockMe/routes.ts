@@ -4,6 +4,7 @@ import { assignUserToSite, deleteUserSiteAssigned, getSiteAssignedBySiteId, getS
 import { createSchedule, deleteSchedule, getScheduleByUserSiteAssign, getScheduleDetail, updateSchedule } from "./controller/userSiteScheduleController";
 import { test1 } from "./controller/testController";
 import uploadImage from "../../middleware/uploadImage";
+import { startClock, updateClock } from "./controller/clockController";
 
 const router  = Router();
 
@@ -31,6 +32,10 @@ router.get("/user-site-assign/:id/schedule",getScheduleByUserSiteAssign);
 router.get("/schedule/:id",getScheduleDetail);
 router.put("/schedule/:id",updateSchedule);
 router.delete("/schedule/:id",deleteSchedule);
+
+// routes for clock
+router.get("/site/:id/clock-in",startClock);
+router.put("/clock/:id",updateClock)
 
 // teting routes
 router.post("/test",uploadImage.single("image"),test1);
