@@ -19,7 +19,7 @@ const options:Options = {
         description:"For tracking the working hours of employee and managing human resource to work sites."
       }
     ],
-    host: "http://localhost:" + process.env.API_PORT, // Define the host dynamically based on your port
+    host: "https://prise.vercel.app",
     basePath: "/api", // Define the base path for your API
     schemes: ["http", "https"], // Supported schemes
   },
