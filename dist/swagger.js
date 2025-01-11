@@ -12,10 +12,19 @@ const options = {
             version: "1.0.0",
             description: "REST API documentation for the Prise project."
         },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "https",
+                    scheme: "bearer",
+                    bearerFormat: "JWT"
+                }
+            }
+        },
         servers: [
             {
                 url: "https://prise.vercel.app/",
-                description: "My API Documentation",
+                description: "Prise Api",
             },
         ],
         tags: [

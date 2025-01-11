@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const routes_1 = __importDefault(require("./routes"));
 const database_1 = __importDefault(require("./config/database"));
-const initializeSwaggerDocumentation_1 = __importDefault(require("./config/initializeSwaggerDocumentation"));
 const testController_1 = require("./modules/Common/controller/testController");
 // import errorHandler from './middleware/errorHandler';
 (0, database_1.default)();
@@ -23,7 +22,7 @@ app.use(function (req, res, next) {
 // Routes
 app.use('/api', routes_1.default);
 app.get('/', testController_1.testFunction);
-(0, initializeSwaggerDocumentation_1.default)(app);
+// initializeSwaggerDocumentation(app);
 // Global Error Handler
 // app.use(errorHandler);
 exports.default = app;

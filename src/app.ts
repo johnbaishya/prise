@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
 // Routes
 app.use('/api', appRoutes);
 app.get('/',testFunction)
-initializeSwaggerDocumentation(app);
+// initializeSwaggerDocumentation(app);
 
 // Global Error Handler
 // app.use(errorHandler);
