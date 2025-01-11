@@ -1,11 +1,8 @@
 import "dotenv/config";
 import app from './app';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./swagger";
 import redoc from "redoc-express";
-// import config from './config';
+import swaggerDoc from "./swagger.json";
 
 // const PORT = config.port || 3000;
 const PORT = process.env.API_PORT||3000;
@@ -22,16 +19,16 @@ app.get('/api-docs', redoc({
 }));
 
 app.get('/swagger.json', (req, res) => {
-  res.json(swaggerSpec);
+  res.json(swaggerDoc);
 });
 
 
 
 // Start the Express server
 // uncomment this code while running in local-------------------
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// });
 // ----------------------------------------------------------
 
 
