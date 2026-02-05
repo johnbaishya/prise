@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EntityType = void 0;
+var EntityType;
+(function (EntityType) {
+    EntityType["Company"] = "Company";
+    EntityType["ClockMeSite"] = "ClockMeSite";
+    EntityType["user"] = "user";
+    EntityType["Product"] = "Product";
+})(EntityType || (exports.EntityType = EntityType = {}));
