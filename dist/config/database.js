@@ -19,7 +19,7 @@ const connectDb = () => {
     })
         .catch((error) => {
         console.log("database connection failed. exiting now...");
-        console.error(error);
+        console.error("database connection error", error);
         process.exit(1);
     });
 };

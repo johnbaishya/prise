@@ -26,18 +26,18 @@ app.get('/swagger.json', (req, res) => {
 
 // Start the Express server
 // uncomment this code while running in local-------------------
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 // ----------------------------------------------------------
 
 
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received. Closing HTTP server...');
-  process.exit(0);
-});
+// process.on('SIGTERM', () => {
+//   console.log('SIGTERM signal received. Closing HTTP server...');
+//   process.exit(0);
+// });
 
 export default (req: VercelRequest, res: VercelResponse) => {
   app(req, res);

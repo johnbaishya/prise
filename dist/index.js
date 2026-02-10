@@ -22,15 +22,15 @@ app_1.default.get('/swagger.json', (req, res) => {
 });
 // Start the Express server
 // uncomment this code while running in local-------------------
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
+app_1.default.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
 // ----------------------------------------------------------
 // Graceful shutdown
-process.on('SIGTERM', () => {
-    console.log('SIGTERM signal received. Closing HTTP server...');
-    process.exit(0);
-});
+// process.on('SIGTERM', () => {
+//   console.log('SIGTERM signal received. Closing HTTP server...');
+//   process.exit(0);
+// });
 exports.default = (req, res) => {
     (0, app_1.default)(req, res);
 };
