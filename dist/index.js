@@ -8,7 +8,7 @@ const app_1 = __importDefault(require("./app"));
 const redoc_express_1 = __importDefault(require("redoc-express"));
 const swagger_json_1 = __importDefault(require("./swagger.json"));
 // const PORT = config.port || 3000;
-const PORT = process.env.API_PORT || 3000;
+const PORT = process.env.PORT || 3000;
 // const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 // app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec,{
 //   customCssUrl: CSS_URL

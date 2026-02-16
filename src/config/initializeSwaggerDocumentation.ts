@@ -2,7 +2,7 @@ import { Application } from "express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { serve, setup } from "swagger-ui-express";
 
-const {BASE_URI,API_PORT} = process.env;
+const {BASE_URI,PORT} = process.env;
 
 const initializeSwaggerDocumentation = (app:Application)=>{
     const opt = {
@@ -30,7 +30,7 @@ const initializeSwaggerDocumentation = (app:Application)=>{
           },
           servers: [
             {
-              url: `${BASE_URI}:${API_PORT}`,
+              url: `${BASE_URI}:${PORT}`,
             },
           ],
         },

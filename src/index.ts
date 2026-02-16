@@ -5,7 +5,7 @@ import redoc from "redoc-express";
 import swaggerDoc from "./swagger.json";
 
 // const PORT = config.port || 3000;
-const PORT = process.env.API_PORT||3000;
+const PORT = process.env.PORT||3000;
 
 // const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = require("swagger-ui-express");
-const { BASE_URI, API_PORT } = process.env;
+const { BASE_URI, PORT } = process.env;
 const initializeSwaggerDocumentation = (app) => {
     const opt = {
         swaggerOptions: {
@@ -31,7 +31,7 @@ const initializeSwaggerDocumentation = (app) => {
             },
             servers: [
                 {
-                    url: `${BASE_URI}:${API_PORT}`,
+                    url: `${BASE_URI}:${PORT}`,
                 },
             ],
         },
