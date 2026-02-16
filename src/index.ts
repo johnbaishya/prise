@@ -5,7 +5,7 @@ import redoc from "redoc-express";
 import swaggerDoc from "./swagger.json";
 
 // const PORT = config.port || 3000;
-const PORT = process.env.PORT||3000;
+const PORT:number = parseInt(process.env.PORT||"3000", 10);
 
 // const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 
@@ -26,7 +26,7 @@ app.get('/swagger.json', (req, res) => {
 
 // Start the Express server
 // uncomment this code while running in local-------------------
-app.listen(PORT, () => {
+app.listen(PORT,"0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 // ----------------------------------------------------------

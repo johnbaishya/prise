@@ -8,7 +8,7 @@ const app_1 = __importDefault(require("./app"));
 const redoc_express_1 = __importDefault(require("redoc-express"));
 const swagger_json_1 = __importDefault(require("./swagger.json"));
 // const PORT = config.port || 3000;
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || "3000", 10);
 // const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 // app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec,{
 //   customCssUrl: CSS_URL
@@ -22,7 +22,7 @@ app_1.default.get('/swagger.json', (req, res) => {
 });
 // Start the Express server
 // uncomment this code while running in local-------------------
-app_1.default.listen(PORT, () => {
+app_1.default.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 // ----------------------------------------------------------
