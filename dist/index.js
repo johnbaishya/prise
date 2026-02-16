@@ -31,6 +31,6 @@ app_1.default.listen(PORT, () => {
 //   console.log('SIGTERM signal received. Closing HTTP server...');
 //   process.exit(0);
 // });
-exports.default = (req, res) => {
-    (0, app_1.default)(req, res);
-};
+// export default (req: VercelRequest, res: VercelResponse) => {
+//   app(req, res);
+// };

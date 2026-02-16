@@ -39,6 +39,6 @@ app.listen(PORT, () => {
 //   process.exit(0);
 // });
 
-export default (req: VercelRequest, res: VercelResponse) => {
-  app(req, res);
-};
+// export default (req: VercelRequest, res: VercelResponse) => {
+//   app(req, res);
+// };
