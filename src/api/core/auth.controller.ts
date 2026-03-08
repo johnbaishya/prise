@@ -12,6 +12,8 @@ import { UserRequest } from "../../Types/request";
 import { UpdateUserReqBody } from "../../modules/Common/types/reqBodyTypes";
 import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../libs/reqres";
 import { MulterImageFile } from "../../modules/Common/types/FileTypes";
+import { OAuth2Client } from "google-auth-library";
+import axios from "axios";
 
 
 
@@ -337,4 +339,128 @@ export const verifyAuthentication = (req:UserRequest,res:Response)=>{
   } catch (error) {
       sendResponseWithMessage(res,401,"invalid token");
   }
+}
+
+
+
+
+
+export const googleLogin = async(req:Request,res:Response)=>{
+  const client = new OAuth2Client(process.env.GOOGLE_SIGNIN_WEB_CLIENT_ID);
+  const {idToken} = req.body;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_SIGNIN_WEB_CLIENT_ID, // Must match the one used in your React Native app
+    });
+    const payload:any = ticket.getPayload();
+    const email = payload.email;
+    const last_name = payload.familyName;
+    const first_name = payload.name?payload.name:"user";
+    const profile_pic = payload.picture;
+    const oldUser = await User.findOne({ email });
+    let user = null;
+    if(!oldUser){
+      user = await User.create({
+        first_name,
+        last_name,
+        email: email.toLowerCase(), // sanitize: convert email to lowercase
+        profile_pic,
+      });
+    }else{
+      user = await User.findByIdAndUpdate(oldUser.id,{first_name,last_name,profile_pic},{new:true});
+    }
+
+    const params:tokenParam = {
+      id:user.id,
+      email,
+      first_name:user.first_name,
+      last_name:user.last_name,
+      role:user.role,
+    }
+   
+     const token  = createToken(params);
+       // save user token
+       user.token = token;
+       let newUser  = {
+         id:user.id,
+         first_name:user.first_name,
+         last_name:user.last_name,
+         email:user.email,
+         profile_pic:user.profile_pic,
+         role:user.role,
+     };
+     
+     const newResponse = {
+      user:newUser,
+      token,
+     }
+ 
+      res.status(200).json(newResponse);
+      return;
+     
+   } catch (err) {
+     console.log(err);
+     sendErrorResponse(res,err)
+   }
+}
+
+
+export const facebookLogin = async(req:Request,res:Response)=>{
+  const client = new OAuth2Client(process.env.GOOGLE_SIGNIN_WEB_CLIENT_ID);
+  const {accessToken} = req.body;
+  try {
+    const response = await axios.get("https://graph.facebook.com/me?fields=id,name,email,first_name,last_name,picture&access_token="+accessToken);
+    const payload = response.data; 
+    const email = payload.email;
+    const last_name = payload.last_name;
+    const first_name = payload.first_name?payload.first_name:"user";
+    const profile_pic = payload.picture?.data?.url;
+    const facebook_id = payload.id;
+    const oldUser = await User.findOne({ facebook_id });
+    let user = null;
+    if(!oldUser){
+      user = await User.create({
+        first_name,
+        last_name,
+        email, // sanitize: convert email to lowercase
+        profile_pic,
+        facebook_id,
+      });
+    }else{
+      user = await User.findByIdAndUpdate(oldUser.id,{first_name,last_name,profile_pic,email},{new:true});
+    }
+
+    const params:tokenParam = {
+      id:user.id,
+      email,
+      first_name:user.first_name,
+      last_name:user.last_name,
+      role:user.role,
+    }
+   
+     const token  = createToken(params);
+       // save user token
+       user.token = token;
+       let newUser  = {
+         id:user.id,
+         first_name:user.first_name,
+         last_name:user.last_name,
+         email:user.email,
+         profile_pic:user.profile_pic,
+         role:user.role,
+     };
+     
+     const newResponse = {
+      user:newUser,
+      token,
+     }
+ 
+      res.status(200).json(newResponse);
+      return;
+     
+   } catch (err) {
+     console.log(err);
+     sendErrorResponse(res,err)
+   }
 }

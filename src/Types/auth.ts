@@ -3,6 +3,7 @@ export type tokenParam = {
     email:string,
     first_name:string,
     last_name:string,
+    role?:string
 }
 
 export type userTokenPayload ={
@@ -10,4 +11,5 @@ export type userTokenPayload ={
     email: string;
     first_name: string;
     last_name: string;
+    role?: string;
 }

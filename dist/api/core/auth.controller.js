@@ -12,11 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyAuthentication = exports.ChangeUserProfilePicture = exports.getUser = exports.updateUser = exports.userLogin = exports.userRegister = void 0;
+exports.facebookLogin = exports.googleLogin = exports.verifyAuthentication = exports.ChangeUserProfilePicture = exports.getUser = exports.updateUser = exports.userLogin = exports.userRegister = void 0;
 const user_model_1 = __importDefault(require("../../core/user/user.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const auth_1 = require("../../libs/auth");
 const reqres_1 = require("../../libs/reqres");
+const google_auth_library_1 = require("google-auth-library");
+const axios_1 = __importDefault(require("axios"));
 // for register=======================================================================================================
 /**
  * @swagger
@@ -322,3 +324,117 @@ const verifyAuthentication = (req, res) => {
     }
 };
 exports.verifyAuthentication = verifyAuthentication;
+const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const client = new google_auth_library_1.OAuth2Client(process.env.GOOGLE_SIGNIN_WEB_CLIENT_ID);
+    const { idToken } = req.body;
+    try {
+        const ticket = yield client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_SIGNIN_WEB_CLIENT_ID, // Must match the one used in your React Native app
+        });
+        const payload = ticket.getPayload();
+        const email = payload.email;
+        const last_name = payload.familyName;
+        const first_name = payload.name ? payload.name : "user";
+        const profile_pic = payload.picture;
+        const oldUser = yield user_model_1.default.findOne({ email });
+        let user = null;
+        if (!oldUser) {
+            user = yield user_model_1.default.create({
+                first_name,
+                last_name,
+                email: email.toLowerCase(), // sanitize: convert email to lowercase
+                profile_pic,
+            });
+        }
+        else {
+            user = yield user_model_1.default.findByIdAndUpdate(oldUser.id, { first_name, last_name, profile_pic }, { new: true });
+        }
+        const params = {
+            id: user.id,
+            email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            role: user.role,
+        };
+        const token = (0, auth_1.createToken)(params);
+        // save user token
+        user.token = token;
+        let newUser = {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            profile_pic: user.profile_pic,
+            role: user.role,
+        };
+        const newResponse = {
+            user: newUser,
+            token,
+        };
+        res.status(200).json(newResponse);
+        return;
+    }
+    catch (err) {
+        console.log(err);
+        (0, reqres_1.sendErrorResponse)(res, err);
+    }
+});
+exports.googleLogin = googleLogin;
+const facebookLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const client = new google_auth_library_1.OAuth2Client(process.env.GOOGLE_SIGNIN_WEB_CLIENT_ID);
+    const { accessToken } = req.body;
+    try {
+        const response = yield axios_1.default.get("https://graph.facebook.com/me?fields=id,name,email,first_name,last_name,picture&access_token=" + accessToken);
+        const payload = response.data;
+        const email = payload.email;
+        const last_name = payload.last_name;
+        const first_name = payload.first_name ? payload.first_name : "user";
+        const profile_pic = (_b = (_a = payload.picture) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.url;
+        const facebook_id = payload.id;
+        const oldUser = yield user_model_1.default.findOne({ facebook_id });
+        let user = null;
+        if (!oldUser) {
+            user = yield user_model_1.default.create({
+                first_name,
+                last_name,
+                email, // sanitize: convert email to lowercase
+                profile_pic,
+                facebook_id,
+            });
+        }
+        else {
+            user = yield user_model_1.default.findByIdAndUpdate(oldUser.id, { first_name, last_name, profile_pic, email }, { new: true });
+        }
+        const params = {
+            id: user.id,
+            email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            role: user.role,
+        };
+        const token = (0, auth_1.createToken)(params);
+        // save user token
+        user.token = token;
+        let newUser = {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            profile_pic: user.profile_pic,
+            role: user.role,
+        };
+        const newResponse = {
+            user: newUser,
+            token,
+        };
+        res.status(200).json(newResponse);
+        return;
+    }
+    catch (err) {
+        console.log(err);
+        (0, reqres_1.sendErrorResponse)(res, err);
+    }
+});
+exports.facebookLogin = facebookLogin;

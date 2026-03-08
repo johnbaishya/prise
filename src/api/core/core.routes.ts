@@ -1,7 +1,7 @@
 import { Router } from "express";
 import verifyToken from "../../middleware/auth";
 import companyController from "./company.controller";
-import { ChangeUserProfilePicture, getUser, updateUser, userLogin, userRegister, verifyAuthentication } from "./auth.controller";
+import { ChangeUserProfilePicture, facebookLogin, getUser, googleLogin, updateUser, userLogin, userRegister, verifyAuthentication } from "./auth.controller";
 import uploadImage from "../../middleware/uploadImage";
 import { testFunction } from "../../modules/Common/controller/testController";
 
@@ -15,6 +15,8 @@ router.get("/user/verify-token",verifyToken,verifyAuthentication);
 router.get("/",testFunction)
 router.post("/user/register",userRegister);
 router.post("/user/login",userLogin);
+router.post("/user/google-login",googleLogin)
+router.post("/user/facebook-login",facebookLogin)
 router.post("/user/profile-pic",[verifyToken,uploadImage.single("image")],ChangeUserProfilePicture)
 router.put("/user/profile",verifyToken,updateUser)
 router.get("/user/profile",verifyToken,getUser)

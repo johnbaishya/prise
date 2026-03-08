@@ -16,6 +16,8 @@ router.get("/user/verify-token", auth_1.default, auth_controller_1.verifyAuthent
 router.get("/", testController_1.testFunction);
 router.post("/user/register", auth_controller_1.userRegister);
 router.post("/user/login", auth_controller_1.userLogin);
+router.post("/user/google-login", auth_controller_1.googleLogin);
+router.post("/user/facebook-login", auth_controller_1.facebookLogin);
 router.post("/user/profile-pic", [auth_1.default, uploadImage_1.default.single("image")], auth_controller_1.ChangeUserProfilePicture);
 router.put("/user/profile", auth_1.default, auth_controller_1.updateUser);
 router.get("/user/profile", auth_1.default, auth_controller_1.getUser);
