@@ -34,20 +34,46 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const companySchema = new mongoose_1.default.Schema({
-    name: { type: String, required: true },
-    description: { type: String },
-    email: { type: String },
-    profile_pic: { type: String, require: false },
-    address: { type: String },
-    lat: { type: String },
-    lon: { type: String },
-    phone: { type: String },
-    user_id: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
-    category: { type: String, required: true },
-    currency: { type: String, required: true, default: "USD" },
-    brand_color: { type: String, default: "#000000" },
-    brand_logo: { type: String },
+const productSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    slug: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    description: {
+        type: String
+    },
+    original_price: {
+        type: Number,
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    company_id: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    },
+    product_category_id: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "ProductCategory",
+        required: true
+    },
+    tags: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "ProductTag",
+        }],
+    stock: {
+        type: Number,
+        default: 0
+    },
+}, {
+    timestamps: true
 });
-const Company = mongoose_1.default.models.Company || mongoose_1.default.model("Company", companySchema);
-exports.default = Company;
+const Product = mongoose_1.default.models.Product || mongoose_1.default.model("Product", productSchema);
+exports.default = Product;

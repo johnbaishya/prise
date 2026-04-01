@@ -1,7 +1,9 @@
+import { Document, Types } from "mongoose";
+
 export enum EntityType{
     Company="Company",
     ClockMeSite = "ClockMeSite",
-    user = "user",
+    User = "User",
     Product = "Product",
 }
 
@@ -31,4 +33,15 @@ export interface MulterImageFile extends Express.Multer.File {
 export type CreateGalleryInput = {
     entity_name:String,
     record_id:String,
+}
+
+export interface IGallery extends Document {
+  entity_name: EntityType;
+  record_id: Types.ObjectId;
+  key: string;
+  location: string;
+  bucket?: string;
+  acl?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

@@ -10,7 +10,10 @@ const companySchema = new mongoose.Schema({
   lon:{type:String},
   phone:{type:String},
   user_id:{type:Schema.Types.ObjectId, required:true, ref:"User"},
-  category:{type:String,required:true}
+  category:{type:String,required:true},
+  currency:{type:String,required:true,default:"USD"},
+  brand_color:{type:String,default:"#000000"},
+  brand_logo:{type:String},
 });
 
 const Company = mongoose.models.Company||mongoose.model("Company", companySchema);

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteS3Image = exports.uploadImage = void 0;
+exports.deleteMultipleS3Images = exports.deleteS3Image = exports.uploadImage = void 0;
 const multer_1 = __importDefault(require("multer"));
 const multer_s3_1 = __importDefault(require("multer-s3"));
 const client_s3_1 = require("@aws-sdk/client-s3");
@@ -55,3 +55,27 @@ const deleteS3Image = (key) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteS3Image = deleteS3Image;
+// for deleting multiple images from s3
+// iota delete multiple images from s3 we need to pass an array of image keys to the deleteMultipleS3Images function and then we will create an array of objects with the key property and then we will pass that array to the deleteObjectsCommand of s3 client.
+// it could be used in the scenario like where we want to delete all the images of a product when we delete that product from the database.
+const deleteMultipleS3Images = (s3Images) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const Objects = s3Images.map(image => {
+            return { Key: image.key };
+        });
+        const input = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Delete: {
+                Objects: Objects,
+                Quiet: false
+            }
+        };
+        const deleteCommand = new client_s3_1.DeleteObjectsCommand(input);
+        const response = yield s3Config_1.default.send(deleteCommand);
+        return response;
+    }
+    catch (error) {
+        console.log("error from delete multiple images", error);
+    }
+});
+exports.deleteMultipleS3Images = deleteMultipleS3Images;

@@ -5,6 +5,6 @@ var EntityType;
 (function (EntityType) {
     EntityType["Company"] = "Company";
     EntityType["ClockMeSite"] = "ClockMeSite";
-    EntityType["user"] = "user";
+    EntityType["User"] = "User";
     EntityType["Product"] = "Product";
 })(EntityType || (exports.EntityType = EntityType = {}));

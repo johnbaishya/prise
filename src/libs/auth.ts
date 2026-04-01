@@ -4,6 +4,8 @@ import  jwt from "jsonwebtoken";
 import { UserRequest } from "../Types/request";
 import { Response } from "express";
 import { error } from "console";
+import { ca } from "zod/v4/locales";
+import Company from "@/core/company/company.model";
 
 export const createToken = ({id,email,first_name,last_name}:tokenParam):string=>{
     const token:string = jwt.sign(
@@ -28,6 +30,12 @@ export const checkOwnership = (req:UserRequest,res:Response,doc:Document):boolea
         
 }
 
+// export const checkComanyOwnershipByCompanyId = async (req:UserRequest,res:Response,companyId:string):Promise<boolean>=>{
+//         let company = await Company.findById(companyId);
+//         let isOwner  = checkOwnership(req,res,company)
+//         return isOwner;
+
+// }
 
 export const checkOwnershipStatus = (req:UserRequest,res:Response,doc:Document)=>{
     try {

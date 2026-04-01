@@ -22,6 +22,11 @@ const checkOwnership = (req, res, doc) => {
     return true;
 };
 exports.checkOwnership = checkOwnership;
+// export const checkComanyOwnershipByCompanyId = async (req:UserRequest,res:Response,companyId:string):Promise<boolean>=>{
+//         let company = await Company.findById(companyId);
+//         let isOwner  = checkOwnership(req,res,company)
+//         return isOwner;
+// }
 const checkOwnershipStatus = (req, res, doc) => {
     var _a;
     try {
