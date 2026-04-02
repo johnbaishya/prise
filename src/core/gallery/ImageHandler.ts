@@ -2,7 +2,7 @@ import AWS,{ S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import s3Storage from "multer-s3";
 import { DeleteObjectCommand, DeleteObjectsCommand } from "@aws-sdk/client-s3"
-import s3Config from "../config/s3Config";
+import s3Config from "../../config/s3Config";
 import { IGallery } from "@/core/gallery/gallery.types";
 
 // const s3 = new S3Client({

@@ -39,8 +39,17 @@ const productCategorySchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    slug: {
+        type: String,
+        required: true,
+    },
     description: {
         type: String
+    },
+    company_id: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true

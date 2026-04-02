@@ -16,7 +16,7 @@ exports.deleteMultipleS3Images = exports.deleteS3Image = exports.uploadImage = v
 const multer_1 = __importDefault(require("multer"));
 const multer_s3_1 = __importDefault(require("multer-s3"));
 const client_s3_1 = require("@aws-sdk/client-s3");
-const s3Config_1 = __importDefault(require("../config/s3Config"));
+const s3Config_1 = __importDefault(require("../../config/s3Config"));
 // const s3 = new S3Client({
 //     region:process.env.AWS_REGION,
 //     endpoint:process.env.AWS_REGION_ENDPOINT    ,

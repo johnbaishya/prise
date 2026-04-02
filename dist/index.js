@@ -6,19 +6,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const app_1 = __importDefault(require("./app"));
 const redoc_express_1 = __importDefault(require("redoc-express"));
-const swagger_json_1 = __importDefault(require("./swagger.json"));
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 // const PORT = config.port || 3000;
 const PORT = parseInt(process.env.PORT || "3000", 10);
 // const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 // app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec,{
 //   customCssUrl: CSS_URL
 // }))
-app_1.default.get('/api-docs', (0, redoc_express_1.default)({
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "API Documentation",
+            version: "1.0.0",
+        },
+    },
+    apis: ["./src/**/*.ts"],
+};
+app_1.default.get('/api-doc', (0, redoc_express_1.default)({
     title: 'API Documentation',
-    specUrl: '/swagger.json',
+    specUrl: '/swagger.json?=' + Date.now() // Cache busting,
 }));
 app_1.default.get('/swagger.json', (req, res) => {
-    res.json(swagger_json_1.default);
+    res.setHeader('Cache-Control', 'no-store');
+    res.json((0, swagger_jsdoc_1.default)(options));
 });
 // Start the Express server
 // uncomment this code while running in local-------------------

@@ -41,31 +41,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProduct = void 0;
 const productService = __importStar(require("@/apps/Showcase/services/product.service"));
-const company_model_1 = __importDefault(require("@/core/company/company.model"));
-const auth_1 = require("@/libs/auth");
+const reqres_1 = require("@/libs/reqres");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const data = req.body;
-        const companyId = data.comapany_id;
-        const company = yield company_model_1.default.findById(companyId);
-        const isOwner = (0, auth_1.checkOwnership)(req, res, company);
-        if (!isOwner) {
-            return; // checkOwnership will handle the response if the user is not the owner
-        }
-        const product = yield productService.createProduct(data);
-        res.status(201).json({
-            message: "Product created successfully",
-            product,
-        });
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const product = yield productService.createProduct(data, userId);
+        (0, reqres_1.sendSuccessResponse)(res, product);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.status || 500).json({ message: error.message });
     }
 });
 exports.createProduct = createProduct;

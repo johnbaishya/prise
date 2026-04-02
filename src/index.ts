@@ -3,6 +3,7 @@ import app from './app';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import redoc from "redoc-express";
 import swaggerDoc from "./swagger.json";
+import swaggerJSDoc from "swagger-jsdoc";
 
 // const PORT = config.port || 3000;
 const PORT:number = parseInt(process.env.PORT||"3000", 10);
@@ -13,13 +14,25 @@ const PORT:number = parseInt(process.env.PORT||"3000", 10);
 //   customCssUrl: CSS_URL
 // }))
 
-app.get('/api-docs', redoc({
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API Documentation",
+      version: "1.0.0",
+    },
+  },
+  apis: ["./src/**/*.ts"],
+};
+
+app.get('/api-doc', redoc({
   title: 'API Documentation',
-  specUrl: '/swagger.json',
+  specUrl: '/swagger.json?=' + Date.now() // Cache busting,
 }));
 
 app.get('/swagger.json', (req, res) => {
-  res.json(swaggerDoc);
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(swaggerJSDoc(options));
 });
 
 

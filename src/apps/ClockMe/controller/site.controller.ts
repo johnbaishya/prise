@@ -7,7 +7,7 @@ import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from 
 import { MulterImageFile } from "../../../modules/Common/types/FileTypes";
 import { EntityType} from "../../../core/gallery/gallery.types";
 import Gallery from "../../../core/gallery/gallery.model";
-import { deleteS3Image } from "../../../services/ImageHandler";
+import { deleteS3Image } from "../../../core/gallery/ImageHandler";
 
 
 //  to add a site

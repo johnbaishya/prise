@@ -12,13 +12,19 @@ export interface IProduct extends Document {
   description?: string;
   original_price?: number;
   price: number;
-  comapany_id: Types.ObjectId;
+  company_id: Types.ObjectId;
   product_category_id: Types.ObjectId;
   tags: Types.ObjectId[];
   stock: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
+
+
+
+export interface IProductCategory extends Document {
+  name: string;
+  description?: string;
+  company_id: Types.ObjectId;
+} 
 
 
 

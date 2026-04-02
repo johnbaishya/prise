@@ -19,7 +19,7 @@ const company_model_1 = __importDefault(require("../../../core/company/company.m
 const reqres_1 = require("../../../libs/reqres");
 const gallery_types_1 = require("../../../core/gallery/gallery.types");
 const gallery_model_1 = __importDefault(require("../../../core/gallery/gallery.model"));
-const ImageHandler_1 = require("../../../services/ImageHandler");
+const ImageHandler_1 = require("../../../core/gallery/ImageHandler");
 //  to add a site
 /**
  * @swagger

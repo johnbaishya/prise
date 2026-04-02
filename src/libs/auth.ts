@@ -18,6 +18,8 @@ export const createToken = ({id,email,first_name,last_name}:tokenParam):string=>
 
 
 
+// ===========================================================================================================================
+// function to check ownership by comparing user id from token with user id in the document
 export const checkOwnership = (req:UserRequest,res:Response,doc:Document):boolean=>{
         let userId = req.user?.id!;
         let userIdInDocument = doc.get("user_id");
@@ -30,16 +32,24 @@ export const checkOwnership = (req:UserRequest,res:Response,doc:Document):boolea
         
 }
 
-// export const checkComanyOwnershipByCompanyId = async (req:UserRequest,res:Response,companyId:string):Promise<boolean>=>{
-//         let company = await Company.findById(companyId);
-//         let isOwner  = checkOwnership(req,res,company)
-//         return isOwner;
 
-// }
+// =--==========================================================================================================================
+// function to check company ownership by company id
+// it will be used in the controllers and services to check if the user is the owner of the company before allowing them to perform certain actions (like creating a product, etc.)
+export const checkComanyOwnershipByCompanyId = async (userId:string,companyId:string):Promise<boolean>=>{
+    let company = await Company.findById(companyId);
+    let isOwner  = checkOwnershipStatus(userId,company);
+    return isOwner;
+}
 
-export const checkOwnershipStatus = (req:UserRequest,res:Response,doc:Document)=>{
+
+
+
+// =============================================================================================================================
+// function to check ownership status by comparing user id from token with user id in the document
+export const checkOwnershipStatus = (userId:string,doc:Document):boolean=>{
     try {
-        let userId = req.user?.id!;
+        console.log("user id from token:",userId)
         let userIdInDocument = doc.get("user_id");
         let isowner  = userId.toString() === userIdInDocument.toString()
         if (!isowner) {

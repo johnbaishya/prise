@@ -18,7 +18,7 @@ const auth_1 = require("../../libs/auth");
 const reqres_1 = require("../../libs/reqres");
 const gallery_types_1 = require("../gallery/gallery.types");
 const gallery_model_1 = __importDefault(require("../gallery/gallery.model"));
-const ImageHandler_1 = require("../../services/ImageHandler");
+const ImageHandler_1 = require("../gallery/ImageHandler");
 // to create a company
 /**
  * @swagger

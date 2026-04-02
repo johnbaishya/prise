@@ -12,8 +12,9 @@ const router = Router();
 router.get("/user/verify-token",verifyToken,verifyAuthentication);
 
 // routes for user
-router.get("/",testFunction)
-router.post("/user/register",userRegister);
+router.get("/asd",testFunction)
+// router.post("/user/register",userRegister);
+router.post("/user/register",testFunction);
 router.post("/user/login",userLogin);
 router.post("/user/google-login",googleLogin)
 router.post("/user/facebook-login",facebookLogin)

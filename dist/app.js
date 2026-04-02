@@ -11,8 +11,8 @@ const testController_1 = require("./modules/Common/controller/testController");
 (0, database_1.default)();
 const app = (0, express_1.default)();
 // Middleware
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded({extended:false}))
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:4001');

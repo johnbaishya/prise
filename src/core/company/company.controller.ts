@@ -7,7 +7,7 @@ import { AddGalleryReqBody } from "../../modules/Common/types/reqBodyTypes";
 import { EntityType } from "../gallery/gallery.types";
 import { MulterImageFile } from "../../modules/Common/types/FileTypes";
 import Gallery from "../gallery/gallery.model";
-import { deleteS3Image } from "../../services/ImageHandler";
+import { deleteS3Image } from "../gallery/ImageHandler";
 
 
 // to create a company

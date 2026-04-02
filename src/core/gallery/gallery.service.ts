@@ -1,6 +1,6 @@
 import { EntityType, IGallery, MulterImageFile } from "./gallery.types"
 import Gallery from "./gallery.model";
-import { deleteS3Image } from "@/services/ImageHandler";
+import { deleteS3Image } from "@/core/gallery/ImageHandler";
 
 
 

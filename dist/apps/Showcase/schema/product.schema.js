@@ -8,7 +8,7 @@ exports.createProductSchema = zod_1.z.object({
     description: zod_1.z.string().optional(),
     original_price: zod_1.z.number().optional(),
     price: zod_1.z.number(),
-    comapany_id: zod_1.z.string(),
+    company_id: zod_1.z.string(),
     product_category_id: zod_1.z.string(),
     tags: zod_1.z.array(zod_1.z.string()).optional(),
     stock: zod_1.z.number().optional(),

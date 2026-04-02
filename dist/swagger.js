@@ -30,11 +30,15 @@ const options = {
         tags: [
             {
                 name: "Common",
-                description: "Coomon api  that will be used by other modules. for example, routes related to user, company, authentication, etc "
+                description: "Common api  that will be used by other modules. for example, routes related to user, company, authentication, etc "
             },
             {
                 name: "ClockMe",
                 description: "For tracking the working hours of employee and managing human resource to work sites."
+            },
+            {
+                name: "Showcase",
+                description: "For managing the products and services of the company and showcasing them to the customers."
             }
         ],
         host: "https://prise.vercel.app/",

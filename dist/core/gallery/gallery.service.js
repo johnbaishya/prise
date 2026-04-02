@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getEachGalleryImage = exports.deleteGalleryImage = exports.getGalleryImages = exports.addGalleryImages = void 0;
 const gallery_model_1 = __importDefault(require("./gallery.model"));
-const ImageHandler_1 = require("@/services/ImageHandler");
+const ImageHandler_1 = require("@/core/gallery/ImageHandler");
 const addGalleryImages = (entity, entityId, files) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!files) {

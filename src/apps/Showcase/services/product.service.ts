@@ -1,10 +1,18 @@
+import { checkComanyOwnershipByCompanyId } from "@/libs/auth";
 import Product from "../models/product.model";
 import { CreateProductDTO } from "../schema/product.schema";
-import { IProduct } from "../types/product.types";
+import { IProduct } from "../types/showcase.interface";
 
-export const createProduct = async (data: CreateProductDTO): Promise<IProduct> => {
-  
-  // You can add extra logic here (slug validation, stock default, etc.)
+
+export const createProduct = async (data: CreateProductDTO,userId:string): Promise<IProduct> => {
+  const companyId = data.company_id;
+  const isOwner = await checkComanyOwnershipByCompanyId(userId, companyId);
+  if (!isOwner) {
+    const error = new Error("You are not authorized to create a product for this company");
+    (error as any).status = 403;
+    throw error;
+  }
+
   const product = await Product.create(data);
   return product;
 };

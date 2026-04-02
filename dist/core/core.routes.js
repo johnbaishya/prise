@@ -13,8 +13,9 @@ const router = (0, express_1.Router)();
 // route to check if token is valid 
 router.get("/user/verify-token", auth_1.default, auth_controller_1.verifyAuthentication);
 // routes for user
-router.get("/", testController_1.testFunction);
-router.post("/user/register", auth_controller_1.userRegister);
+router.get("/asd", testController_1.testFunction);
+// router.post("/user/register",userRegister);
+router.post("/user/register", testController_1.testFunction);
 router.post("/user/login", auth_controller_1.userLogin);
 router.post("/user/google-login", auth_controller_1.googleLogin);
 router.post("/user/facebook-login", auth_controller_1.facebookLogin);
