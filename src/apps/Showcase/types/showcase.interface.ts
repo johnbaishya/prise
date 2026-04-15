@@ -22,9 +22,17 @@ export interface IProduct extends Document {
 
 export interface IProductCategory extends Document {
   name: string;
+  slug: string;
   description?: string;
   company_id: Types.ObjectId;
 } 
+
+export interface IProductTag extends Document {
+  name: string;
+  slug: string;
+  description?: string;
+  company_id: Types.ObjectId;
+}
 
 
 

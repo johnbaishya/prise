@@ -6,8 +6,17 @@ const productTagsSchema = new Schema({
         type:String,
         required:true
     },
+    slug:{
+        type:String,
+        required:true
+    },
     description:{
         type:String
+    },
+    company_id:{
+        type:Schema.Types.ObjectId,
+        ref:"Company",
+        required:true
     }
 },{
     timestamps:true
