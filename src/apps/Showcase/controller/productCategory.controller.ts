@@ -1,7 +1,6 @@
 import { UserRequest } from "@/Types/request";
 import { Response } from "express";
 import { createProductCategoryDTO } from "../schema/productCategory.schema";
-import { checkComanyOwnershipByCompanyId } from "@/libs/auth";
 import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqres";
 import ProductCategory from "../models/productCategory.model";
 import * as productCategoryService from "../services/productCategory.service";
@@ -67,12 +66,18 @@ export const createProductCategory = async(req:UserRequest,res:Response)=>{
 
 
 
+
+
+
+
+
+
 // to update a product category by id with company ownership check
 /**
  * 
  * @swagger
  * /api/product-category/{id}:
- *   post:
+ *   put:
  *     security:
  *       - bearerAuth: []
  *     tags: [Showcase]
@@ -121,48 +126,67 @@ export const updateProductCategory = async(req:UserRequest,res:Response)=>{
  } catch (error: any) {
     sendResponseWithMessage(res,error.status,error.message);
  }
-
 }
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 /**
+ * 
  * @swagger
  * /api/product-category/company/{companyId}:
  *   get:
- *    security:
- *      - bearerAuth: []
- *    tags: [Showcase]
- *   summary: Get Product Categories by Company Id
- *  description: Get all product categories of a company by company id.
- *  parameters:
- *  - in: path
- *  name: companyId
- *  schema:
- *    type: string
- *    format: objectId
- * responses:
- *  200:
- *   description: List of product categories.
- *  401:
- *   description: Invalid credentials.
- *  404:
-*    description: Company not found.
- *  500:
- *   description: something wrong
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Showcase]
+ *     summary: Get Product Categories by Company Id
+ *     description: Get all product categories of a company by company id.
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: objectId
+ *     responses:
+ *       200:
+ *         description: List of product categories.
+ *       401:
+ *         description: Invalid credentials.
+ *       404:
+ *         description: Company not found.
+ *       500:
+ *         description: something wrong
  */
 export const getProductCategoriesByCompanyId = async(req:UserRequest,res:Response)=>{
     try {
         const companyId = req.params.companyId;
-        const userId = req.user?.id!;
-        const productCategories = await productCategoryService.getProductCategoriesByCompanyId(companyId,userId);
+        const productCategories = await productCategoryService.getProductCategoriesByCompanyId(companyId);
         sendSuccessResponse(res,productCategories);
     } catch (error) {
         sendResponseWithMessage(res,500,"internal server error");
     }   
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -204,7 +228,19 @@ export const getProductCategoryById = async(req:UserRequest,res:Response)=>{
 };
 
 
-/*
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * @swagger
  * /api/product-category/{id}:
  *   delete:

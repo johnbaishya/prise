@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import * as productService from "@/apps/Showcase/services/product.service";
 import { UserRequest } from "@/Types/request";
 import Company from "@/core/company/company.model";
-import { checkComanyOwnershipByCompanyId, checkOwnership } from "@/libs/auth";
+import { checkOwnership } from "@/libs/auth";
 import { CreateProductDTO } from "../schema/product.schema";
 import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqres";
 

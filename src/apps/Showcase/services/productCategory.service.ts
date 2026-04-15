@@ -1,11 +1,10 @@
-import { checkComanyOwnershipByCompanyId } from "@/libs/auth";
 import ProductCategory from "../models/productCategory.model";
-import { createProductCategoryDTO } from "../schema/productCategory.schema";
+import { createProductCategoryDTO, updateProductCategoryDTO } from "../schema/productCategory.schema";
 import { IProductCategory } from "../types/showcase.interface";
 import { check } from "zod";
 import { get } from "http";
 import Product from "../models/product.model";
-import { checkifCompanyExists } from "@/core/company/company.service";
+import { checkCompanyOwnershipByCompanyId, checkifCompanyExists } from "@/core/company/company.service";
 
 
 
@@ -33,7 +32,7 @@ export const getProductCategoryWithOwnershipAndExistance = async (productCategor
         (error as any).status = 404;
         throw error;
     }
-    const isOwner = await checkComanyOwnershipByCompanyId(userId, productCategory.company_id.toString());
+    const isOwner = await checkCompanyOwnershipByCompanyId(userId, productCategory.company_id.toString());
     if(!isOwner){
         const error = new Error("You are not authorized to perform this action");
         (error as any).status = 403;
@@ -50,7 +49,7 @@ export const getProductCategoryWithOwnershipAndExistance = async (productCategor
 // function to create a product category with company ownership check
 export const createProductCategory = async (data:createProductCategoryDTO,userId:string):Promise<IProductCategory>=>{
     try {
-        const isOwner = checkComanyOwnershipByCompanyId(userId,data.company_id);
+        const isOwner = await checkCompanyOwnershipByCompanyId(userId,data.company_id);
         if (!isOwner) {
             const error = new Error("You are not authorized to create a product category for this company");
             (error as any).status = 403;
@@ -66,8 +65,8 @@ export const createProductCategory = async (data:createProductCategoryDTO,userId
 
 
 // ===========================================================================================================================
-// function to get product categories by company id with company ownership check
-export const getProductCategoriesByCompanyId = async (companyId:string,userId:string):Promise<IProductCategory[]>=>{
+// function to get product categories by company id 
+export const getProductCategoriesByCompanyId = async (companyId:string):Promise<IProductCategory[]>=>{
     try {
         const companyExist = await checkifCompanyExists(companyId);
         if (!companyExist) {
@@ -104,10 +103,11 @@ export const getProductCategoryById = async (id:string):Promise<IProductCategory
 
 // ==========================================================================================================================
 // function to update product category by id with company ownership check
-export const updateProductCategory = async (productCategoryId:string,data:createProductCategoryDTO,userId:string):Promise<IProductCategory>=>{
+export const updateProductCategory = async (productCategoryId:string,data:updateProductCategoryDTO,userId:string):Promise<IProductCategory>=>{
     try {
+        const {name,slug,description} = data
         await getProductCategoryWithOwnershipAndExistance(productCategoryId,userId);
-        const updatedProductCategory = await ProductCategory.findByIdAndUpdate(productCategoryId,data,{new:true});
+        const updatedProductCategory = await ProductCategory.findByIdAndUpdate(productCategoryId,{name,slug,description},{new:true});
         return updatedProductCategory;
     } catch (error) {
         throw error

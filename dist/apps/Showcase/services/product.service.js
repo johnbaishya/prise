@@ -13,11 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listProducts = exports.deleteProduct = exports.updateProduct = exports.getProductById = exports.createProduct = void 0;
-const auth_1 = require("@/libs/auth");
+const company_service_1 = require("@/core/company/company.service");
 const product_model_1 = __importDefault(require("../models/product.model"));
 const createProduct = (data, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const companyId = data.company_id;
-    const isOwner = yield (0, auth_1.checkComanyOwnershipByCompanyId)(userId, companyId);
+    const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, companyId);
     if (!isOwner) {
         const error = new Error("You are not authorized to create a product for this company");
         error.status = 403;

@@ -7,5 +7,11 @@ export const createProductCategorySchema = z.object({
   company_id: z.string(),
 });
 
-export type createProductCategoryDTO = z.infer<typeof createProductCategorySchema>;
+export const updateProductCategorySchema = z.object({
+  name: z.string().optional(),
+  slug: z.string().optional(),
+  description: z.string().optional(),
+});
 
+export type createProductCategoryDTO = z.infer<typeof createProductCategorySchema>;
+export type updateProductCategoryDTO = z.infer<typeof updateProductCategorySchema>;

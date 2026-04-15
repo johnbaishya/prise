@@ -103,7 +103,7 @@ exports.createProductCategory = createProductCategory;
  *
  * @swagger
  * /api/product-category/{id}:
- *   post:
+ *   put:
  *     security:
  *       - bearerAuth: []
  *     tags: [Showcase]
@@ -155,36 +155,36 @@ const updateProductCategory = (req, res) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.updateProductCategory = updateProductCategory;
 /**
+ *
  * @swagger
  * /api/product-category/company/{companyId}:
  *   get:
- *    security:
- *      - bearerAuth: []
- *    tags: [Showcase]
- *   summary: Get Product Categories by Company Id
- *  description: Get all product categories of a company by company id.
- *  parameters:
- *  - in: path
- *  name: companyId
- *  schema:
- *    type: string
- *    format: objectId
- * responses:
- *  200:
- *   description: List of product categories.
- *  401:
- *   description: Invalid credentials.
- *  404:
-*    description: Company not found.
- *  500:
- *   description: something wrong
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Showcase]
+ *     summary: Get Product Categories by Company Id
+ *     description: Get all product categories of a company by company id.
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: objectId
+ *     responses:
+ *       200:
+ *         description: List of product categories.
+ *       401:
+ *         description: Invalid credentials.
+ *       404:
+ *         description: Company not found.
+ *       500:
+ *         description: something wrong
  */
 const getProductCategoriesByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
         const companyId = req.params.companyId;
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        const productCategories = yield productCategoryService.getProductCategoriesByCompanyId(companyId, userId);
+        const productCategories = yield productCategoryService.getProductCategoriesByCompanyId(companyId);
         (0, reqres_1.sendSuccessResponse)(res, productCategories);
     }
     catch (error) {
@@ -231,7 +231,7 @@ const getProductCategoryById = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getProductCategoryById = getProductCategoryById;
-/*
+/**
  * @swagger
  * /api/product-category/{id}:
  *   delete:
