@@ -20,7 +20,7 @@ describe("checkCompanyOwnershipByCompanyId test", () => {
     it("should return false if company does not exist", () => __awaiter(void 0, void 0, void 0, function* () {
         const mockFindById = jest.fn().mockResolvedValue(null);
         company_model_1.default.findById = mockFindById;
-        yield expect((0, company_service_1.checkCompanyOwnershipByCompanyId)("user1", "company1")).resolves.toBe(false);
+        yield expect((0, company_service_1.checkCompanyOwnershipByCompanyId)("user1", "company1")).rejects.toThrow("Company not found");
     }));
     it("should return true if user is owner", () => __awaiter(void 0, void 0, void 0, function* () {
         const mockCompany = {
@@ -36,6 +36,6 @@ describe("checkCompanyOwnershipByCompanyId test", () => {
         };
         company_model_1.default.findById.mockResolvedValue(mockCompany);
         const result = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)("user456", "company1");
-        expect(result).toBe(false);
+        expect(result).rejects.toThrow("You are not authorized to perform this action");
     }));
 });

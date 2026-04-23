@@ -15,7 +15,7 @@ describe("checkCompanyOwnershipByCompanyId test", () => {
 
         await expect(
             checkCompanyOwnershipByCompanyId("user1", "company1")
-        ).resolves.toBe(false);
+        ).rejects.toThrow("Company not found");
     });
 
 
@@ -48,6 +48,6 @@ describe("checkCompanyOwnershipByCompanyId test", () => {
             "company1"
         );
 
-        expect(result).toBe(false); 
+        expect(result).rejects.toThrow("You are not authorized to perform this action");
     });
 });

@@ -31,13 +31,13 @@ export interface MulterImageFile extends Express.Multer.File {
 
 
 export type CreateGalleryInput = {
-    entity_name:String,
-    record_id:String,
+    entityType: String,
+    entityId:String,
 }
 
 export interface IGallery extends Document {
-  entity_name: EntityType;
-  record_id: Types.ObjectId;
+  entityType: EntityType;
+  entityId: Types.ObjectId;
   key: string;
   location: string;
   bucket?: string;

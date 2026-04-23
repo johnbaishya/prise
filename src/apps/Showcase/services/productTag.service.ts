@@ -23,13 +23,13 @@ export const checkProductTagExists = async (productTagId:string):Promise<boolean
 // ===========================================================================================================================
 // function to check if user is owner of the product tag by product tag id also checks if the product tag exists
 export const getProductTagWithOwnershipAndExistance = async (productTagId:string,userId:string):Promise<IProductTag>=>{
-    const productTag = await ProductTag.findById(productTagId);
+    const productTag: IProductTag | null = await ProductTag.findById(productTagId);
     if (!productTag) {
         const error = new Error("Product tag not found");
         (error as any).status = 404;
         throw error;
     }
-    const isOwner = await checkCompanyOwnershipByCompanyId(userId, productTag.company_id.toString()); 
+    const isOwner = await checkCompanyOwnershipByCompanyId(userId, productTag.company.toString()); 
     if (!isOwner) {
         const error = new Error("You are not authorized to access this product tag");
         (error as any).status = 403;
@@ -43,11 +43,30 @@ export const getProductTagWithOwnershipAndExistance = async (productTagId:string
 
 
 
+// to verify if user is owner of the product tag by product tag id also checks if the product tag exists
+export const checkProductTagOwnership = async (productTagId:string,userId:string):Promise<boolean>=>{
+    try {
+        const productTag: IProductTag | null = await ProductTag.findById(productTagId);
+        if (!productTag) {
+            return false;
+        }
+        const isOwner:boolean = await checkCompanyOwnershipByCompanyId(userId, productTag.company.toString());
+        return isOwner;
+    } catch (error) {
+        return false;
+    }  
+};
+
+
+
+
+
+
 
 // ===========================================================================================================================
 // function to create a product tag with company ownership check
 export const createProductTag = async (data: createProductTagDTO,userId:string): Promise<IProductTag> => {
-    const companyId = data.company_id;
+    const {companyId} = data;
     const isOwner = await checkCompanyOwnershipByCompanyId(userId, companyId); 
 
     if (!isOwner) {
@@ -99,7 +118,7 @@ export const getProductTagsByCompanyId = async (companyId:string):Promise<IProdu
             (error as any).status = 404;
             throw error;
         }
-        const productTags:IProductTag[] = await ProductTag.find({company_id:companyId});
+        const productTags:IProductTag[] = await ProductTag.find({company:companyId});
         return productTags;
     } catch (error) {
         throw error;
@@ -121,3 +140,20 @@ export const getProductTagById = async (id:string):Promise<IProductTag>=>{
         throw error;
     }
 };
+
+
+// service to verify if a product tag belongs to a company
+export const verifyProductTagOfCompany = async (companyId:string,productTagId:string):Promise<void>=>{
+    const productTag = await ProductTag.findById(productTagId);
+    if (!productTag) {
+        const error = new Error("Product tag not found");
+        (error as any).status = 404;
+        throw error;
+    }
+    let isOfCompany = productTag.company.toString() === companyId;
+    if(!isOfCompany) {
+        const error = new Error("you are not authorized to use this product tag for this company");
+        (error as any).status = 403;
+        throw error;
+    }
+}

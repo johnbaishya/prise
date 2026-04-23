@@ -13,19 +13,19 @@ const productSchema = new Schema({
     description:{
         type:String
     },
-    original_price:{
+    originalPrice:{
         type:Number,
     },
     price:{
         type:Number,
         required:true
     },
-    company_id:{
+    company:{
         type:Schema.Types.ObjectId,
         ref:"Company",
         required:true
     },
-    product_category_id:{
+    productCategory:{
         type:Schema.Types.ObjectId,
         ref:"ProductCategory",
         required:true

@@ -4,7 +4,7 @@ import ClockMeUserSiteAssigned from "../models/ClockMeUserSiteAssigned";
 import ClockMeSite from "../models/ClockMeSite";
 import { checkOwnership } from "../../../libs/auth";
 import User from "../../../core/user/user.model";
-import { sendErrorResponse } from "../../../libs/reqres";
+import { sendErrorResponse } from "../../../libs/reqest";
 
 
 //  to assign a site to a user

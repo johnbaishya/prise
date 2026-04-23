@@ -4,6 +4,6 @@ export type UpdateUserReqBody = {
 }
 
 export type AddGalleryReqBody = {
-    entity_name:String,
-    record_id:String,
+    entityType:String,
+    entityId:String,
 }

@@ -43,7 +43,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProductTag = exports.getProductTagById = exports.getProductTagsByCompanyId = exports.updateProductTag = exports.createProductTag = void 0;
-const reqres_1 = require("@/libs/reqres");
+const reqest_1 = require("@/libs/reqest");
 const productTagService = __importStar(require("../services/productTag.service"));
 // to create a Product Tag
 /**
@@ -90,10 +90,10 @@ const createProductTag = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const data = req.body;
         const productTag = yield productTagService.createProductTag(data, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
-        (0, reqres_1.sendSuccessResponse)(res, productTag);
+        (0, reqest_1.sendSuccessResponse)(res, productTag);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status || 500, error.message || "internal server error");
+        (0, reqest_1.sendResponseWithMessage)(res, error.status || 500, error.message || "internal server error");
     }
 });
 exports.createProductTag = createProductTag;
@@ -146,10 +146,10 @@ const updateProductTag = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const data = req.body;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         const updatedProductTag = yield productTagService.updateProductTag(productTagId, data, userId);
-        (0, reqres_1.sendSuccessResponse)(res, updatedProductTag);
+        (0, reqest_1.sendSuccessResponse)(res, updatedProductTag);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status, error.message);
+        (0, reqest_1.sendResponseWithMessage)(res, error.status, error.message);
     }
 });
 exports.updateProductTag = updateProductTag;
@@ -182,12 +182,12 @@ exports.updateProductTag = updateProductTag;
  */
 const getProductTagsByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const companyId = req.params.companyId;
+        const companyId = req.params.id;
         const productTags = yield productTagService.getProductTagsByCompanyId(companyId);
-        (0, reqres_1.sendSuccessResponse)(res, productTags);
+        (0, reqest_1.sendSuccessResponse)(res, productTags);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, 500, "internal server error");
+        (0, reqest_1.sendResponseWithMessage)(res, 500, "internal server error");
     }
 });
 exports.getProductTagsByCompanyId = getProductTagsByCompanyId;
@@ -223,10 +223,10 @@ const getProductTagById = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const productTagId = req.params.id;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         const productTag = yield productTagService.getProductTagById(productTagId);
-        (0, reqres_1.sendSuccessResponse)(res, productTag);
+        (0, reqest_1.sendSuccessResponse)(res, productTag);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status, error.message);
+        (0, reqest_1.sendResponseWithMessage)(res, error.status, error.message);
     }
 });
 exports.getProductTagById = getProductTagById;
@@ -262,10 +262,10 @@ const deleteProductTag = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const productTagId = req.params.id;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         yield productTagService.deleteProductTag(productTagId, userId);
-        (0, reqres_1.sendResponseWithMessage)(res, 200, "product tag deleted successfully");
+        (0, reqest_1.sendResponseWithMessage)(res, 200, "product tag deleted successfully");
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status, error.message);
+        (0, reqest_1.sendResponseWithMessage)(res, error.status, error.message);
     }
 });
 exports.deleteProductTag = deleteProductTag;

@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCompanyOwnershipByCompanyId = exports.checkifCompanyExists = void 0;
+exports.verifyCompanyOwnershipByCompanyId = exports.checkCompanyOwnershipByCompanyId = exports.checkifCompanyExists = void 0;
 const auth_1 = require("@/libs/auth");
 const company_model_1 = __importDefault(require("./company.model"));
+const errorHandler_1 = __importDefault(require("@/libs/errorHandler"));
 // function to check if the company exists by id
 const checkifCompanyExists = (companyId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -36,9 +37,35 @@ const checkCompanyOwnershipByCompanyId = (userId, companyId) => __awaiter(void 0
     let company = yield company_model_1.default.findById(companyId);
     let ownerId = company === null || company === void 0 ? void 0 : company.get("user_id");
     if (!company) {
-        return false;
+        const error = new errorHandler_1.default("Company not found", 404);
+        throw error;
     }
     let isOwner = (0, auth_1.checkOwnershipStatus)(userId, ownerId);
-    return isOwner;
+    if (!isOwner) {
+        const error = new errorHandler_1.default("You are not authorized to perform this action", 403);
+        throw error;
+    }
+    else {
+        return true;
+    }
 });
 exports.checkCompanyOwnershipByCompanyId = checkCompanyOwnershipByCompanyId;
+const verifyCompanyOwnershipByCompanyId = (userId, companyId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const company = yield company_model_1.default.findById(companyId);
+        if (!company) {
+            const error = new errorHandler_1.default("Company not found", 404);
+            throw error;
+        }
+        const ownerId = company === null || company === void 0 ? void 0 : company.get("user_id");
+        const isOwner = (0, auth_1.checkOwnershipStatus)(userId, ownerId);
+        if (!isOwner) {
+            const error = new errorHandler_1.default("You are not authorized to perform this action", 403);
+            throw error;
+        }
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.verifyCompanyOwnershipByCompanyId = verifyCompanyOwnershipByCompanyId;

@@ -58,10 +58,10 @@ exports.deleteS3Image = deleteS3Image;
 // for deleting multiple images from s3
 // iota delete multiple images from s3 we need to pass an array of image keys to the deleteMultipleS3Images function and then we will create an array of objects with the key property and then we will pass that array to the deleteObjectsCommand of s3 client.
 // it could be used in the scenario like where we want to delete all the images of a product when we delete that product from the database.
-const deleteMultipleS3Images = (s3Images) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteMultipleS3Images = (keys) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Objects = s3Images.map(image => {
-            return { Key: image.key };
+        const Objects = keys.map(key => {
+            return { Key: key };
         });
         const input = {
             Bucket: process.env.AWS_S3_BUCKET_NAME,

@@ -9,6 +9,7 @@ const company_controller_1 = __importDefault(require("./company/company.controll
 const auth_controller_1 = require("./user/auth.controller");
 const uploadImage_1 = __importDefault(require("../middleware/uploadImage"));
 const testController_1 = require("../modules/Common/controller/testController");
+const gallery_controller_1 = require("./gallery/gallery.controller");
 const router = (0, express_1.Router)();
 // route to check if token is valid 
 router.get("/user/verify-token", auth_1.default, auth_controller_1.verifyAuthentication);
@@ -32,5 +33,7 @@ router.get("/company/:id", auth_1.default, company_controller_1.default.getCompa
 router.post("/company/:id/gallery", [auth_1.default, uploadImage_1.default.array("images")], company_controller_1.default.addCompanyGallery);
 router.get("/company/:id/gallery", auth_1.default, company_controller_1.default.getCompanyGallery);
 router.delete("/company/gallery/:id", auth_1.default, company_controller_1.default.deleteCompanyGalleryImage);
+// routes for galeery
+router.delete("/gallery/:id", auth_1.default, gallery_controller_1.deleteGallery);
 const commonRoutes = router;
 exports.default = commonRoutes;

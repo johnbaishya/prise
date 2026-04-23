@@ -18,6 +18,7 @@ const company_service_1 = require("@/core/company/company.service");
 jest.mock("../models/productCategory.model");
 jest.mock("@/libs/auth");
 jest.mock("@/core/company/company.service");
+jest.mock("@/apps/Showcase/services/productCategory.service");
 describe("getProductCategoryWithOwnershipAndExistance", () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -46,7 +47,7 @@ describe("createProductCategory test", () => {
         company_service_1.checkCompanyOwnershipByCompanyId.mockResolvedValue(false);
         let inputData = {
             name: "Category 1",
-            company_id: "company1",
+            companyId: "company1",
             slug: "category-1",
             description: "This is a sample product category"
         };
@@ -55,11 +56,11 @@ describe("createProductCategory test", () => {
     it("should create product category if user is owner", () => __awaiter(void 0, void 0, void 0, function* () {
         let inputData = {
             name: "Category 1",
-            company_id: "company1",
+            companyId: "company1",
             slug: "category-1",
             description: "This is a sample product category"
         };
-        const mockCategory = { name: "Category 1", company_id: "company1" };
+        const mockCategory = { name: "Category 1", companyId: "company1" };
         company_service_1.checkCompanyOwnershipByCompanyId.mockResolvedValue(true);
         productCategory_model_1.default.create.mockResolvedValue(mockCategory);
         const result = yield (0, productCategory_service_1.createProductCategory)(inputData, "user1");

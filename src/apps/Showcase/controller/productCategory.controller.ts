@@ -1,7 +1,7 @@
 import { UserRequest } from "@/Types/request";
 import { Response } from "express";
 import { createProductCategoryDTO } from "../schema/productCategory.schema";
-import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqres";
+import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import ProductCategory from "../models/productCategory.model";
 import * as productCategoryService from "../services/productCategory.service";
 
@@ -36,13 +36,13 @@ import * as productCategoryService from "../services/productCategory.service";
  *               slug: 
  *                 type: string
  *                 required: true
- *               company_id:
+ *               companyId:
  *                 type: string
  *                 format: objectId
  *             required:
  *               - name
  *               - slug
- *               - company_id
+ *               - companyId
  *     responses:
  *       200:
  *         description: created product category.
@@ -170,7 +170,7 @@ export const updateProductCategory = async(req:UserRequest,res:Response)=>{
  */
 export const getProductCategoriesByCompanyId = async(req:UserRequest,res:Response)=>{
     try {
-        const companyId = req.params.companyId;
+        const companyId = req.params.id;
         const productCategories = await productCategoryService.getProductCategoriesByCompanyId(companyId);
         sendSuccessResponse(res,productCategories);
     } catch (error) {

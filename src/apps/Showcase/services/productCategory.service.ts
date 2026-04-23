@@ -23,16 +23,34 @@ export const checkProductCategoryExists = async (productCategoryId:string):Promi
 };
 
 
-// ==========================================================================================================
-// function to check if user is owner of the product category by product category id also checks if the product category exists
-export const getProductCategoryWithOwnershipAndExistance = async (productCategoryId:string,userId:string):Promise<IProductCategory>=>{
-    const productCategory = await ProductCategory.findById(productCategoryId);
+// serviuce to verify if a Product category belongs to a companyq
+export const verifyProductCategoryofCompany = async (companyId:string,productCategoryId:string):Promise<void>=>{
+    const productCategory:IProductCategory|null = await ProductCategory.findById(productCategoryId);
     if (!productCategory) {
         const error = new Error("Product category not found");
         (error as any).status = 404;
         throw error;
     }
-    const isOwner = await checkCompanyOwnershipByCompanyId(userId, productCategory.company_id.toString());
+    let isOfCompany = productCategory.company.toString() === companyId;
+    if(!isOfCompany) {
+        const error = new Error("you are not authorized to use this product category for this company");
+        (error as any).status = 403;
+        throw error;
+    }
+}
+
+
+
+// ==========================================================================================================
+// function to check if user is owner of the product category by product category id also checks if the product category exists
+export const getProductCategoryWithOwnershipAndExistance = async (productCategoryId:string,userId:string):Promise<IProductCategory>=>{
+    const productCategory:IProductCategory | null = await ProductCategory.findById(productCategoryId);
+    if (!productCategory) {
+        const error = new Error("Product category not found");
+        (error as any).status = 404;
+        throw error;
+    }
+    const isOwner = await checkCompanyOwnershipByCompanyId(userId, productCategory.company.toString());
     if(!isOwner){
         const error = new Error("You are not authorized to perform this action");
         (error as any).status = 403;
@@ -45,17 +63,38 @@ export const getProductCategoryWithOwnershipAndExistance = async (productCategor
 
 
 
+// function to check if product category exists by id and if user is owner
+export const checkProductCategoryOwnership = async (productCategoryId:string,userId:string):Promise<boolean>=>{
+    try {
+        const productCategory:IProductCategory | null = await ProductCategory.findById(productCategoryId);
+        if (!productCategory) {
+            return false;
+        }
+        const isOwner = await checkCompanyOwnershipByCompanyId(userId, productCategory.company.toString());
+        return isOwner;
+    } catch (error) {
+        return false;
+    }
+};
+
+
+
+
 // ===========================================================================================================================
 // function to create a product category with company ownership check
 export const createProductCategory = async (data:createProductCategoryDTO,userId:string):Promise<IProductCategory>=>{
     try {
-        const isOwner = await checkCompanyOwnershipByCompanyId(userId,data.company_id);
+        const isOwner = await checkCompanyOwnershipByCompanyId(userId,data.companyId);
         if (!isOwner) {
             const error = new Error("You are not authorized to create a product category for this company");
             (error as any).status = 403;
             throw error;
         }
-        const productCategory:IProductCategory = await ProductCategory.create(data); 
+        const payload = {
+            ...data,
+            company:data.companyId
+        }
+        const productCategory:IProductCategory = await ProductCategory.create(payload); 
         return productCategory;
     } catch (error) {
         throw error
@@ -75,7 +114,7 @@ export const getProductCategoriesByCompanyId = async (companyId:string):Promise<
             throw error;
         }
 
-        const productCategories:IProductCategory[] = await ProductCategory.find({company_id:companyId});   
+        const productCategories:IProductCategory[] = await ProductCategory.find({company:companyId});   
         return productCategories;
     } catch (error) {
         throw error

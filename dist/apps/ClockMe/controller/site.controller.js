@@ -16,7 +16,7 @@ exports.getSiteGallery = exports.deleteSiteGalleryImage = exports.addSiteGallery
 const ClockMeSite_1 = __importDefault(require("../models/ClockMeSite"));
 const auth_1 = require("../../../libs/auth");
 const company_model_1 = __importDefault(require("../../../core/company/company.model"));
-const reqres_1 = require("../../../libs/reqres");
+const reqest_1 = require("../../../libs/reqest");
 const gallery_types_1 = require("../../../core/gallery/gallery.types");
 const gallery_model_1 = __importDefault(require("../../../core/gallery/gallery.model"));
 const ImageHandler_1 = require("../../../core/gallery/ImageHandler");
@@ -336,7 +336,7 @@ const addSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function*
         let site = yield ClockMeSite_1.default.findById(siteId);
         // checking if company exists
         if (!site) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "site not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "site not found");
             return;
         }
         // checking if the current user owns the company
@@ -350,19 +350,19 @@ const addSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (!files) {
             files = [];
             ;
-            (0, reqres_1.sendSuccessResponse)(res, []);
+            (0, reqest_1.sendSuccessResponse)(res, []);
             return;
         }
         // checking if files are in other format rather than array.
         if (!Array.isArray(files)) {
             files = [];
-            (0, reqres_1.sendSuccessResponse)(res, []);
+            (0, reqest_1.sendSuccessResponse)(res, []);
             return;
         }
         let galleriesBody = files.map((item) => {
             return {
-                entity_name: gallery_types_1.EntityType.ClockMeSite,
-                record_id: siteId,
+                entityType: gallery_types_1.EntityType.ClockMeSite,
+                entityId: siteId,
                 key: item.key,
                 location: item.location,
                 bucket: item.bucket,
@@ -370,11 +370,11 @@ const addSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function*
             };
         });
         let gallery = yield gallery_model_1.default.create(galleriesBody);
-        (0, reqres_1.sendSuccessResponse)(res, gallery);
+        (0, reqest_1.sendSuccessResponse)(res, gallery);
     }
     catch (error) {
         console.log("error from addSiteGallery", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.addSiteGallery = addSiteGallery;
@@ -403,7 +403,7 @@ const deleteSiteGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, f
         let gallery = yield gallery_model_1.default.findOne({ key: imageKey });
         // checkimng if gallery image exist
         if (!gallery) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "image does not exist");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "image does not exist");
             return;
         }
         let siteId = gallery.record_id;
@@ -411,7 +411,7 @@ const deleteSiteGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, f
         let site = yield ClockMeSite_1.default.findById(siteId);
         // checking if  company exist
         if (!site) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "site not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "site not found");
             return;
         }
         // checkking if the user has created thhis image
@@ -421,11 +421,11 @@ const deleteSiteGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, f
         }
         yield (0, ImageHandler_1.deleteS3Image)(imageKey);
         yield gallery_model_1.default.findByIdAndDelete(galleryid);
-        (0, reqres_1.sendSuccessResponse)(res, { message: "image deleted successfully" });
+        (0, reqest_1.sendSuccessResponse)(res, { message: "image deleted successfully" });
     }
     catch (error) {
         console.log("error from deleteSiteGallery", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.deleteSiteGalleryImage = deleteSiteGalleryImage;
@@ -453,19 +453,19 @@ const getSiteGallery = (req, res) => __awaiter(void 0, void 0, void 0, function*
         let siteId = req.params.id;
         let site = yield ClockMeSite_1.default.findById(siteId);
         if (!site) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "site not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "site not found");
             return;
         }
         let isOwner = (0, auth_1.checkOwnership)(req, res, site);
         if (!isOwner) {
             return;
         }
-        let gallery = yield gallery_model_1.default.find({ entity_name: gallery_types_1.EntityType.ClockMeSite, record_id: siteId });
-        (0, reqres_1.sendSuccessResponse)(res, gallery);
+        let gallery = yield gallery_model_1.default.find({ entityType: gallery_types_1.EntityType.ClockMeSite, entityId: siteId });
+        (0, reqest_1.sendSuccessResponse)(res, gallery);
     }
     catch (error) {
         console.log("error from getSiteGallery", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.getSiteGallery = getSiteGallery;

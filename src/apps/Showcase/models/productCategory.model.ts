@@ -13,7 +13,7 @@ const productCategorySchema = new Schema({
     description:{
         type:String
     },
-    company_id:{
+    company:{
         type:Schema.Types.ObjectId,
         ref:"Company",
         required:true

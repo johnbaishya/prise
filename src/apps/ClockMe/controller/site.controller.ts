@@ -3,7 +3,7 @@ import { UserRequest } from "../../../Types/request";
 import ClockMeSite from "../models/ClockMeSite";
 import { checkOwnership } from "../../../libs/auth";
 import Company from "../../../core/company/company.model";
-import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../../libs/reqres";
+import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../../libs/reqest";
 import { MulterImageFile } from "../../../modules/Common/types/FileTypes";
 import { EntityType} from "../../../core/gallery/gallery.types";
 import Gallery from "../../../core/gallery/gallery.model";
@@ -354,8 +354,8 @@ export const addSiteGallery = async(req:UserRequest,res:Response)=>{
 
         let galleriesBody = files.map((item)=>{
             return{
-                entity_name:EntityType.ClockMeSite,
-                record_id:siteId,
+                entityType:EntityType.ClockMeSite,
+                entityId:siteId,
                 key:item.key,
                 location:item.location,
                 bucket:item.bucket,
@@ -458,7 +458,7 @@ export const getSiteGallery = async(req:UserRequest,res:Response)=>{
         if(!isOwner){
             return;
         }
-        let gallery = await Gallery.find({entity_name:EntityType.ClockMeSite,record_id:siteId})
+        let gallery = await Gallery.find({entityType:EntityType.ClockMeSite,entityId:siteId})
         sendSuccessResponse(res,gallery);
     } catch (error) {
         console.log("error from getSiteGallery",error);

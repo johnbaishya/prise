@@ -75,7 +75,7 @@ describe("productTag.service", () => {
             (ProductTag.create as jest.Mock).mockResolvedValue(mockProductTag);
 
             const result = await productTagService.createProductTag(
-                { company_id: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" },
+                { companyId: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" },
                 mockUserId
             );
             expect(result).toEqual(mockProductTag);
@@ -87,7 +87,7 @@ describe("productTag.service", () => {
 
             await expect(
                 productTagService.createProductTag(
-                    { company_id: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" },
+                    { companyId: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" },
                     mockUserId
                 )
             ).rejects.toMatchObject({

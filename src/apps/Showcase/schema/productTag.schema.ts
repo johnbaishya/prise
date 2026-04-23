@@ -4,7 +4,7 @@ export const createProductTagSchema = z.object({
   name: z.string(),
   slug: z.string(),
   description: z.string().optional(),
-  company_id: z.string(),
+  companyId: z.string(),
 });
 
 export const updateProductTagSchema = z.object({

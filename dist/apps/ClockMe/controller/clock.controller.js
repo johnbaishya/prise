@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateClock = exports.startClock = exports.checkUserHasRunningClock = void 0;
-const reqres_1 = require("../../../libs/reqres");
+const reqest_1 = require("../../../libs/reqest");
 const ClockMeUserSiteAssigned_1 = __importDefault(require("../models/ClockMeUserSiteAssigned"));
 const Clock_1 = __importDefault(require("../models/Clock"));
 const auth_1 = require("../../../libs/auth");
@@ -30,14 +30,14 @@ const checkUserHasRunningClock = (req, res) => __awaiter(void 0, void 0, void 0,
             status: { $in: [enums_1.clockStatus.active, enums_1.clockStatus.inactive] }
         });
         if (runningClock) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "you already have an ongoing clock. please end that clock first");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "you already have an ongoing clock. please end that clock first");
             return true;
         }
         return false;
     }
     catch (error) {
         console.log("error from checkUserHasRunningClock", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
         return true;
     }
 });
@@ -74,16 +74,16 @@ const startClock = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         let clock_me_site_id = req.params.id;
         let isUserAssignedToSite = yield ClockMeUserSiteAssigned_1.default.findOne({ user_id, clock_me_site_id });
         if (!isUserAssignedToSite) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "you are not authorized for this site");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "you are not authorized for this site");
             return;
         }
         let clock_in = new Date().toISOString();
         let clock = yield Clock_1.default.create({ user_id, clock_me_site_id, clock_in });
-        (0, reqres_1.sendSuccessResponse)(res, clock);
+        (0, reqest_1.sendSuccessResponse)(res, clock);
     }
     catch (error) {
         console.log("error from start clock", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.startClock = startClock;
@@ -127,7 +127,7 @@ const updateClock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let body = req.body;
         let clock = yield Clock_1.default.findById(clockId);
         if (!clock) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "clock  data not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "clock  data not found");
             return;
         }
         let isOwner = (0, auth_1.checkOwnership)(req, res, clock);
@@ -155,11 +155,11 @@ const updateClock = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             status
         };
         let updatedClock = yield Clock_1.default.findByIdAndUpdate(clockId, newBody, { new: true });
-        (0, reqres_1.sendSuccessResponse)(res, updatedClock);
+        (0, reqest_1.sendSuccessResponse)(res, updatedClock);
     }
     catch (error) {
         console.log("error from updateClock", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.updateClock = updateClock;

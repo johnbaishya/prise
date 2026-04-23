@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../../libs/reqres";
+import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../../libs/reqest";
 import { UserRequest } from "../../../Types/request";
 import ClockMeUserSiteAssigned from "../models/ClockMeUserSiteAssigned";
 import Clock from "../models/Clock";

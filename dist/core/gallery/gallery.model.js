@@ -36,15 +36,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const gallery_types_1 = require("./gallery.types");
 const gallerySchema = new mongoose_1.default.Schema({
-    entity_name: {
+    entityType: {
         type: String,
         enum: Object.values(gallery_types_1.EntityType),
         default: gallery_types_1.EntityType.Company,
         required: true,
     },
-    record_id: {
+    entityId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
+        refPath: "entityType"
     },
     key: {
         type: String,

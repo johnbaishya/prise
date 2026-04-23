@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCompanyDetail = exports.listMyCompanies = exports.deleteCompany = exports.updateCompany = exports.addCompany = void 0;
 const company_model_1 = __importDefault(require("./company.model"));
 const auth_1 = require("../../libs/auth");
-const reqres_1 = require("../../libs/reqres");
+const reqest_1 = require("../../libs/reqest");
 const gallery_types_1 = require("../gallery/gallery.types");
 const gallery_model_1 = __importDefault(require("../gallery/gallery.model"));
 const ImageHandler_1 = require("../gallery/ImageHandler");
@@ -292,7 +292,7 @@ const addCompanyGallery = (req, res) => __awaiter(void 0, void 0, void 0, functi
         let company = yield company_model_1.default.findById(companyId);
         // checking if company exists
         if (!company) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "Company not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "Company not found");
             return;
         }
         // checking if the current user owns the company
@@ -306,19 +306,19 @@ const addCompanyGallery = (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (!files) {
             files = [];
             ;
-            (0, reqres_1.sendSuccessResponse)(res, []);
+            (0, reqest_1.sendSuccessResponse)(res, []);
             return;
         }
         // checking if files are in other format rather than array.
         if (!Array.isArray(files)) {
             files = [];
-            (0, reqres_1.sendSuccessResponse)(res, []);
+            (0, reqest_1.sendSuccessResponse)(res, []);
             return;
         }
         let galleriesBody = files.map((item) => {
             return {
-                entity_name: gallery_types_1.EntityType.Company,
-                record_id: companyId,
+                entityType: gallery_types_1.EntityType.Company,
+                entityId: companyId,
                 key: item.key,
                 location: item.location,
                 bucket: item.bucket,
@@ -326,11 +326,11 @@ const addCompanyGallery = (req, res) => __awaiter(void 0, void 0, void 0, functi
             };
         });
         let gallery = yield gallery_model_1.default.create(galleriesBody);
-        (0, reqres_1.sendSuccessResponse)(res, gallery);
+        (0, reqest_1.sendSuccessResponse)(res, gallery);
     }
     catch (error) {
         console.log("error from addCompanyGallery", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 //  to delete the company gallery
@@ -358,7 +358,7 @@ const deleteCompanyGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0
         let gallery = yield gallery_model_1.default.findOne({ key: imageKey });
         // checkimng if gallery image exist
         if (!gallery) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "image does not exist");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "image does not exist");
             return;
         }
         let companyId = gallery.record_id;
@@ -366,7 +366,7 @@ const deleteCompanyGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0
         let company = yield company_model_1.default.findById(companyId);
         // checking if  company exist
         if (!company) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "company not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "company not found");
             return;
         }
         // checkking if the user has created thhis image
@@ -376,11 +376,11 @@ const deleteCompanyGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0
         }
         yield (0, ImageHandler_1.deleteS3Image)(imageKey);
         yield gallery_model_1.default.findByIdAndDelete(galleryid);
-        (0, reqres_1.sendSuccessResponse)(res, { message: "image deleted successfully" });
+        (0, reqest_1.sendSuccessResponse)(res, { message: "image deleted successfully" });
     }
     catch (error) {
         console.log("error from deleteCompanyGallery", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 // to get the gallery of company
@@ -407,19 +407,19 @@ const getCompanyGallery = (req, res) => __awaiter(void 0, void 0, void 0, functi
         let companyId = req.params.id;
         let company = yield company_model_1.default.findById(companyId);
         if (!company) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "company not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "company not found");
             return;
         }
         let isOwner = (0, auth_1.checkOwnership)(req, res, company);
         if (!isOwner) {
             return;
         }
-        let gallery = yield gallery_model_1.default.find({ entity_name: gallery_types_1.EntityType.Company, record_id: companyId });
-        (0, reqres_1.sendSuccessResponse)(res, gallery);
+        let gallery = yield gallery_model_1.default.find({ entityType: gallery_types_1.EntityType.Company, entityId: companyId });
+        (0, reqest_1.sendSuccessResponse)(res, gallery);
     }
     catch (error) {
         console.log("error from getCompanyGaller", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 // to change the profile picture of a company
@@ -455,12 +455,12 @@ const ChangeCompanyProfilePicture = (req, res) => __awaiter(void 0, void 0, void
         let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         let companyId = req.params.id;
         if (!userId) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "user not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "user not found");
             return;
         }
         let company = yield company_model_1.default.findById(companyId);
         if (!company) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "company not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "company not found");
             return;
         }
         let isowner = (0, auth_1.checkOwnership)(req, res, company);
@@ -473,11 +473,11 @@ const ChangeCompanyProfilePicture = (req, res) => __awaiter(void 0, void 0, void
         }
         let image = file;
         let uCompany = yield company_model_1.default.findByIdAndUpdate(companyId, { profile_pic: image.location }, { new: true });
-        (0, reqres_1.sendSuccessResponse)(res, uCompany);
+        (0, reqest_1.sendSuccessResponse)(res, uCompany);
     }
     catch (error) {
         console.log("error from changeCompanyProfilePicture");
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 const companyController = { addCompany: exports.addCompany, deleteCompany: exports.deleteCompany, updateCompany: exports.updateCompany, listMyCompanies: exports.listMyCompanies, getCompanyDetail: exports.getCompanyDetail, addCompanyGallery, deleteCompanyGalleryImage, getCompanyGallery, ChangeCompanyProfilePicture };

@@ -16,7 +16,7 @@ exports.facebookLogin = exports.googleLogin = exports.verifyAuthentication = exp
 const user_model_1 = __importDefault(require("./user.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const auth_1 = require("../../libs/auth");
-const reqres_1 = require("../../libs/reqres");
+const reqest_1 = require("../../libs/reqest");
 const google_auth_library_1 = require("google-auth-library");
 const axios_1 = __importDefault(require("axios"));
 // for register=======================================================================================================
@@ -207,15 +207,15 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         let newBody = { first_name, last_name };
         let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         if (!userId) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "user not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "user not found");
             return;
         }
         let uUser = yield user_model_1.default.findByIdAndUpdate(userId, newBody, { new: true });
-        (0, reqres_1.sendSuccessResponse)(res, uUser);
+        (0, reqest_1.sendSuccessResponse)(res, uUser);
     }
     catch (error) {
         console.log("error from update User", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.updateUser = updateUser;
@@ -239,15 +239,15 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         if (!userId) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "user not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "user not found");
             return;
         }
         let uUser = yield user_model_1.default.findById(userId);
-        (0, reqres_1.sendSuccessResponse)(res, uUser);
+        (0, reqest_1.sendSuccessResponse)(res, uUser);
     }
     catch (error) {
         console.log("error from get User", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.getUser = getUser;
@@ -282,7 +282,7 @@ const ChangeUserProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0,
     try {
         let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         if (!userId) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "user not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "user not found");
             return;
         }
         let file = req.file;
@@ -291,11 +291,11 @@ const ChangeUserProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0,
         }
         let image = file;
         let uUser = yield user_model_1.default.findByIdAndUpdate(userId, { profile_pic: image.location }, { new: true });
-        (0, reqres_1.sendSuccessResponse)(res, uUser);
+        (0, reqest_1.sendSuccessResponse)(res, uUser);
     }
     catch (error) {
         console.log("error from changeUserProfilePicture");
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.ChangeUserProfilePicture = ChangeUserProfilePicture;
@@ -317,10 +317,10 @@ exports.ChangeUserProfilePicture = ChangeUserProfilePicture;
  */
 const verifyAuthentication = (req, res) => {
     try {
-        (0, reqres_1.sendResponseWithMessage)(res, 200, "token is valid");
+        (0, reqest_1.sendResponseWithMessage)(res, 200, "token is valid");
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, 401, "invalid token");
+        (0, reqest_1.sendResponseWithMessage)(res, 401, "invalid token");
     }
 };
 exports.verifyAuthentication = verifyAuthentication;
@@ -377,7 +377,7 @@ const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (err) {
         console.log(err);
-        (0, reqres_1.sendErrorResponse)(res, err);
+        (0, reqest_1.sendErrorResponse)(res, err);
     }
 });
 exports.googleLogin = googleLogin;
@@ -434,7 +434,7 @@ const facebookLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (err) {
         console.log(err);
-        (0, reqres_1.sendErrorResponse)(res, err);
+        (0, reqest_1.sendErrorResponse)(res, err);
     }
 });
 exports.facebookLogin = facebookLogin;

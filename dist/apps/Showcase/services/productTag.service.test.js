@@ -108,13 +108,13 @@ describe("productTag.service", () => {
         it("should create product tag if user is owner", () => __awaiter(void 0, void 0, void 0, function* () {
             companyService.checkCompanyOwnershipByCompanyId.mockResolvedValue(true);
             productTag_model_1.default.create.mockResolvedValue(mockProductTag);
-            const result = yield productTagService.createProductTag({ company_id: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" }, mockUserId);
+            const result = yield productTagService.createProductTag({ companyId: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" }, mockUserId);
             expect(result).toEqual(mockProductTag);
             expect(productTag_model_1.default.create).toHaveBeenCalled();
         }));
         it("should throw 403 if user is not owner", () => __awaiter(void 0, void 0, void 0, function* () {
             companyService.checkCompanyOwnershipByCompanyId.mockResolvedValue(false);
-            yield expect(productTagService.createProductTag({ company_id: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" }, mockUserId)).rejects.toMatchObject({
+            yield expect(productTagService.createProductTag({ companyId: mockCompanyId, name: "Electronics", slug: "electronics", description: "Electronic products" }, mockUserId)).rejects.toMatchObject({
                 message: "You are not authorized to create a product tag for this company",
                 status: 403,
             });

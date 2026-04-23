@@ -5,7 +5,7 @@ import ClockMeSite from "../models/ClockMeSite";
 import { checkOwnership } from "../../../libs/auth";
 import { CreateScheduleRequestBody, TimeScheduleRequestBody } from "../types/reqBodyTypes";
 import ClockMeUserSiteSchedule from "../models/ClockMeUserSiteSchedule";
-import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../../libs/reqres";
+import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../../libs/reqest";
 import { Document } from "mongoose";
 
 

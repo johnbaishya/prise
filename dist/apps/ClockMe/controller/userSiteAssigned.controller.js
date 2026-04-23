@@ -17,7 +17,7 @@ const ClockMeUserSiteAssigned_1 = __importDefault(require("../models/ClockMeUser
 const ClockMeSite_1 = __importDefault(require("../models/ClockMeSite"));
 const auth_1 = require("../../../libs/auth");
 const user_model_1 = __importDefault(require("../../../core/user/user.model"));
-const reqres_1 = require("../../../libs/reqres");
+const reqest_1 = require("../../../libs/reqest");
 //  to assign a site to a user
 /**
  * @swagger
@@ -81,7 +81,7 @@ const assignUserToSite = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         console.log("error from assignUserToSite", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.assignUserToSite = assignUserToSite;
@@ -138,7 +138,7 @@ const updateUserSiteStatus = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (error) {
         console.log("error from UpdateUserSiteStatus", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.updateUserSiteStatus = updateUserSiteStatus;
@@ -178,7 +178,7 @@ const deleteUserSiteAssigned = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
     catch (error) {
         console.log("error from deleteUserSiteAssigned", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.deleteUserSiteAssigned = deleteUserSiteAssigned;
@@ -220,7 +220,7 @@ const getSitesAssigned = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         console.log("error from getSitesAssigned", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.getSitesAssigned = getSitesAssigned;
@@ -260,7 +260,7 @@ const getSiteAssignedBySiteId = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
     catch (error) {
         console.log("error from getSiteAssignedBySiteId", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.getSiteAssignedBySiteId = getSiteAssignedBySiteId;

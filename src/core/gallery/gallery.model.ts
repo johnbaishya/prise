@@ -2,15 +2,16 @@ import mongoose, { Schema } from "mongoose";
 import { EntityType } from "./gallery.types";
 
 const gallerySchema = new mongoose.Schema({
-    entity_name:{
+    entityType:{
         type:String,
         enum:Object.values(EntityType),
         default:EntityType.Company,
         required:true,
     },
-    record_id:{
+    entityId:{
         type:Schema.Types.ObjectId,
         required:true,
+        refPath: "entityType"
     },
     key:{
         type:String,

@@ -1,5 +1,6 @@
 import { checkOwnershipStatus } from "@/libs/auth";
 import Company from "./company.model";
+import AppError from "@/libs/errorHandler";
 
 
 // function to check if the company exists by id
@@ -24,8 +25,33 @@ export const checkCompanyOwnershipByCompanyId = async (userId:string,companyId:s
     let company = await Company.findById(companyId);
     let ownerId = company?.get("user_id");
     if(!company) {
-        return false;
+        const error = new AppError("Company not found", 404);
+        throw error;
     }
     let isOwner:boolean  = checkOwnershipStatus(userId,ownerId);
-    return isOwner;
+    if(!isOwner){
+        const error = new AppError("You are not authorized to perform this action", 403);
+        throw error;    
+    }else{
+        return true;
+    }
+}
+
+
+export const verifyCompanyOwnershipByCompanyId = async (userId:string,companyId:string):Promise<void>=>{
+    try {
+        const company = await Company.findById(companyId);
+        if(!company) {
+            const error = new AppError("Company not found", 404);
+            throw error;
+        }
+        const ownerId = company?.get("user_id");
+        const isOwner:boolean  = checkOwnershipStatus(userId,ownerId);
+        if(!isOwner){
+            const error = new AppError("You are not authorized to perform this action", 403);
+            throw error;    
+        }
+    } catch (error) {
+        throw error;
+    }
 }

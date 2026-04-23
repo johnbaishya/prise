@@ -11,6 +11,7 @@ import { checkCompanyOwnershipByCompanyId } from "@/core/company/company.service
 jest.mock("../models/productCategory.model");
 jest.mock("@/libs/auth");
 jest.mock("@/core/company/company.service");
+jest.mock("@/apps/Showcase/services/productCategory.service");
 
 
 
@@ -65,7 +66,7 @@ describe("createProductCategory test", () => {
 
         let inputData:createProductCategoryDTO = { 
             name: "Category 1", 
-            company_id: "company1" ,
+            companyId: "company1" ,
             slug:"category-1",
             description:"This is a sample product category"
         };
@@ -81,11 +82,11 @@ describe("createProductCategory test", () => {
 
         let inputData:createProductCategoryDTO = { 
             name: "Category 1", 
-            company_id: "company1" ,
+            companyId: "company1" ,
             slug:"category-1",
             description:"This is a sample product category"
         };
-        const mockCategory = { name: "Category 1", company_id: "company1" };
+        const mockCategory = { name: "Category 1", companyId: "company1" };
         (checkCompanyOwnershipByCompanyId as jest.Mock).mockResolvedValue(true);
         (ProductCategory.create as jest.Mock).mockResolvedValue(mockCategory);
 

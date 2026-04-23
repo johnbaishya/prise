@@ -1,7 +1,7 @@
 import { UserRequest } from "@/Types/request";
 import { Response } from "express";
 import { createProductTagDTO } from "../schema/productTag.schema";
-import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqres";
+import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import * as productTagService from "../services/productTag.service";
 
 // to create a Product Tag
@@ -138,7 +138,7 @@ export const updateProductTag = async(req: UserRequest, res: Response) => {
  */
 export const getProductTagsByCompanyId = async(req: UserRequest, res: Response) => {
     try {
-        const companyId = req.params.companyId;
+        const companyId = req.params.id;
         const productTags = await productTagService.getProductTagsByCompanyId(companyId);
         sendSuccessResponse(res, productTags);
     } catch (error) {

@@ -17,7 +17,7 @@ const ClockMeUserSiteAssigned_1 = __importDefault(require("../models/ClockMeUser
 const ClockMeSite_1 = __importDefault(require("../models/ClockMeSite"));
 const auth_1 = require("../../../libs/auth");
 const ClockMeUserSiteSchedule_1 = __importDefault(require("../models/ClockMeUserSiteSchedule"));
-const reqres_1 = require("../../../libs/reqres");
+const reqest_1 = require("../../../libs/reqest");
 /*
 post bosy structure is
 {
@@ -106,7 +106,7 @@ const createSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (error) {
         console.log("error from create schedule", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.createSchedule = createSchedule;
@@ -117,21 +117,21 @@ const checkIsSchedculeCreator = (req, res, schedule) => __awaiter(void 0, void 0
         // let schedule = await ClockMeUserSiteSchedule.findById(scheduleId);
         // checking if schedule exist
         if (!schedule) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "Schedule not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "Schedule not found");
             return false;
         }
         let clock_me_user_site_assigned_id = schedule.clock_me_user_site_assigned_id;
         let UserSiteAssign = yield ClockMeUserSiteAssigned_1.default.findById(clock_me_user_site_assigned_id);
         // checking is the user site assigned data exists
         if (!UserSiteAssign) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "user site assign not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "user site assign not found");
             return false;
         }
         let siteId = UserSiteAssign.clock_me_site_id;
         let site = yield ClockMeSite_1.default.findById(siteId);
         // checking if site exists
         if (!site) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "site not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "site not found");
             return false;
         }
         let isowner = (0, auth_1.checkOwnership)(req, res, site);
@@ -143,7 +143,7 @@ const checkIsSchedculeCreator = (req, res, schedule) => __awaiter(void 0, void 0
     }
     catch (error) {
         console.log("error from updateSchedule");
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
         return false;
     }
 });
@@ -222,11 +222,11 @@ const updateSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function*
             return;
         }
         let updatedSchedule = yield ClockMeUserSiteSchedule_1.default.findByIdAndUpdate(scheduleId, req.body, { new: true });
-        (0, reqres_1.sendSuccessResponse)(res, updatedSchedule);
+        (0, reqest_1.sendSuccessResponse)(res, updatedSchedule);
     }
     catch (error) {
         console.log("error from updateSchedule");
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.updateSchedule = updateSchedule;
@@ -263,7 +263,7 @@ const getScheduleByUserSiteAssign = (req, res) => __awaiter(void 0, void 0, void
     }
     catch (error) {
         console.log("error from getSchedulesByUserSiteAssign", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.getScheduleByUserSiteAssign = getScheduleByUserSiteAssign;
@@ -291,14 +291,14 @@ const getScheduleDetail = (req, res) => __awaiter(void 0, void 0, void 0, functi
         let scheduleId = req.params.id;
         let schedule = ClockMeUserSiteSchedule_1.default.findById(scheduleId);
         if (!schedule) {
-            (0, reqres_1.sendResponseWithMessage)(res, 400, "schedule not found");
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "schedule not found");
             return;
         }
         res.status(200).json(schedule);
     }
     catch (error) {
         console.log("error getScheduleDetail", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.getScheduleDetail = getScheduleDetail;
@@ -330,11 +330,11 @@ const deleteSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function*
             return;
         }
         yield ClockMeUserSiteSchedule_1.default.findByIdAndDelete(scheduleId);
-        (0, reqres_1.sendResponseWithMessage)(res, 200, "Schedule Deleted successfully");
+        (0, reqest_1.sendResponseWithMessage)(res, 200, "Schedule Deleted successfully");
     }
     catch (error) {
         console.log("error from deleteSchedule", error);
-        (0, reqres_1.sendErrorResponse)(res, error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.deleteSchedule = deleteSchedule;

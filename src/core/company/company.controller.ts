@@ -2,7 +2,7 @@ import { Response } from "express";
 import { UserRequest } from "../../Types/request";
 import Company from "./company.model";
 import { checkOwnership } from "../../libs/auth";
-import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../libs/reqres";
+import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../libs/reqest";
 import { AddGalleryReqBody } from "../../modules/Common/types/reqBodyTypes";
 import { EntityType } from "../gallery/gallery.types";
 import { MulterImageFile } from "../../modules/Common/types/FileTypes";
@@ -270,6 +270,9 @@ export const getCompanyDetail = async(req:UserRequest,res:Response)=>{
  *         description: something wrong
  *     
  */
+
+
+
 const addCompanyGallery = async(req:UserRequest,res:Response)=>{
     try {
         let companyId = req.params.id
@@ -304,8 +307,8 @@ const addCompanyGallery = async(req:UserRequest,res:Response)=>{
 
         let galleriesBody = files.map((item)=>{
             return{
-                entity_name:EntityType.Company,
-                record_id:companyId,
+                entityType:EntityType.Company,
+                entityId:companyId,
                 key:item.key,
                 location:item.location,
                 bucket:item.bucket,
@@ -408,7 +411,7 @@ const getCompanyGallery = async(req:UserRequest,res:Response)=>{
         if(!isOwner){
             return;
         }
-        let gallery = await Gallery.find({entity_name:EntityType.Company,record_id:companyId})
+        let gallery = await Gallery.find({entityType:EntityType.Company,entityId:companyId})
         sendSuccessResponse(res,gallery);
     } catch (error) {
         console.log("error from getCompanyGaller",error);

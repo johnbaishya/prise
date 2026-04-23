@@ -4,6 +4,7 @@ import companyController from "./company/company.controller";
 import { ChangeUserProfilePicture, facebookLogin, getUser, googleLogin, updateUser, userLogin, userRegister, verifyAuthentication } from "./user/auth.controller";
 import uploadImage from "../middleware/uploadImage";
 import { testFunction } from "../modules/Common/controller/testController";
+import { deleteGallery } from "./gallery/gallery.controller";
 
 
 const router = Router();
@@ -32,7 +33,11 @@ router.delete("/company/:id",verifyToken,companyController.deleteCompany);
 router.get("/company/:id",verifyToken,companyController.getCompanyDetail);
 router.post("/company/:id/gallery",[verifyToken,uploadImage.array("images")],companyController.addCompanyGallery)
 router.get("/company/:id/gallery",verifyToken,companyController.getCompanyGallery);
-router.delete("/company/gallery/:id",verifyToken,companyController.deleteCompanyGalleryImage)
+router.delete("/company/gallery/:id",verifyToken,companyController.deleteCompanyGalleryImage);
+
+
+// routes for galeery
+router.delete("/gallery/:id",verifyToken,deleteGallery)
 
 const commonRoutes = router;
 

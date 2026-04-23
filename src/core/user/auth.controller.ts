@@ -10,7 +10,7 @@ import { createToken } from "../../libs/auth";
 import { tokenParam } from "../../Types/auth";
 import { UserRequest } from "../../Types/request";
 import { UpdateUserReqBody } from "../../modules/Common/types/reqBodyTypes";
-import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../libs/reqres";
+import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "../../libs/reqest";
 import { MulterImageFile } from "../../modules/Common/types/FileTypes";
 import { OAuth2Client } from "google-auth-library";
 import axios from "axios";

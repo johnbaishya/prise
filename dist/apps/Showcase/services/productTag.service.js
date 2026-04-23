@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductTagById = exports.getProductTagsByCompanyId = exports.deleteProductTag = exports.updateProductTag = exports.createProductTag = exports.getProductTagWithOwnershipAndExistance = exports.checkProductTagExists = void 0;
+exports.verifyProductTagOfCompany = exports.getProductTagById = exports.getProductTagsByCompanyId = exports.deleteProductTag = exports.updateProductTag = exports.createProductTag = exports.checkProductTagOwnership = exports.getProductTagWithOwnershipAndExistance = exports.checkProductTagExists = void 0;
 const company_service_1 = require("@/core/company/company.service");
 const productTag_model_1 = __importDefault(require("../models/productTag.model"));
 // function to check if product tag exists by id
@@ -38,7 +38,7 @@ const getProductTagWithOwnershipAndExistance = (productTagId, userId) => __await
         error.status = 404;
         throw error;
     }
-    const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, productTag.company_id.toString());
+    const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, productTag.company.toString());
     if (!isOwner) {
         const error = new Error("You are not authorized to access this product tag");
         error.status = 403;
@@ -47,10 +47,25 @@ const getProductTagWithOwnershipAndExistance = (productTagId, userId) => __await
     return productTag;
 });
 exports.getProductTagWithOwnershipAndExistance = getProductTagWithOwnershipAndExistance;
+// to verify if user is owner of the product tag by product tag id also checks if the product tag exists
+const checkProductTagOwnership = (productTagId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const productTag = yield productTag_model_1.default.findById(productTagId);
+        if (!productTag) {
+            return false;
+        }
+        const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, productTag.company.toString());
+        return isOwner;
+    }
+    catch (error) {
+        return false;
+    }
+});
+exports.checkProductTagOwnership = checkProductTagOwnership;
 // ===========================================================================================================================
 // function to create a product tag with company ownership check
 const createProductTag = (data, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const companyId = data.company_id;
+    const { companyId } = data;
     const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, companyId);
     if (!isOwner) {
         const error = new Error("You are not authorized to create a product tag for this company");
@@ -92,7 +107,7 @@ const getProductTagsByCompanyId = (companyId) => __awaiter(void 0, void 0, void 
             error.status = 404;
             throw error;
         }
-        const productTags = yield productTag_model_1.default.find({ company_id: companyId });
+        const productTags = yield productTag_model_1.default.find({ company: companyId });
         return productTags;
     }
     catch (error) {
@@ -115,3 +130,19 @@ const getProductTagById = (id) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getProductTagById = getProductTagById;
+// service to verify if a product tag belongs to a company
+const verifyProductTagOfCompany = (companyId, productTagId) => __awaiter(void 0, void 0, void 0, function* () {
+    const productTag = yield productTag_model_1.default.findById(productTagId);
+    if (!productTag) {
+        const error = new Error("Product tag not found");
+        error.status = 404;
+        throw error;
+    }
+    let isOfCompany = productTag.company.toString() === companyId;
+    if (!isOfCompany) {
+        const error = new Error("you are not authorized to use this product tag for this company");
+        error.status = 403;
+        throw error;
+    }
+});
+exports.verifyProductTagOfCompany = verifyProductTagOfCompany;

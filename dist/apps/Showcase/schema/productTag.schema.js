@@ -6,7 +6,7 @@ exports.createProductTagSchema = zod_1.z.object({
     name: zod_1.z.string(),
     slug: zod_1.z.string(),
     description: zod_1.z.string().optional(),
-    company_id: zod_1.z.string(),
+    companyId: zod_1.z.string(),
 });
 exports.updateProductTagSchema = zod_1.z.object({
     name: zod_1.z.string().optional(),

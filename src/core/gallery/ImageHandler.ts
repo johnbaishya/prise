@@ -49,10 +49,10 @@ export const deleteS3Image  = async(key:string)=>{
 // for deleting multiple images from s3
 // iota delete multiple images from s3 we need to pass an array of image keys to the deleteMultipleS3Images function and then we will create an array of objects with the key property and then we will pass that array to the deleteObjectsCommand of s3 client.
 // it could be used in the scenario like where we want to delete all the images of a product when we delete that product from the database.
-export const deleteMultipleS3Images = async(s3Images:IGallery[])=>{
+export const deleteMultipleS3Images = async(keys:string[])=>{
     try {
-        const Objects = s3Images.map(image=>{
-            return {Key:image.key};
+        const Objects = keys.map(key=>{
+            return {Key:key};
         });
 
         const input = {

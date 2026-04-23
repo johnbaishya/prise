@@ -43,7 +43,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProductCategory = exports.getProductCategoryById = exports.getProductCategoriesByCompanyId = exports.updateProductCategory = exports.createProductCategory = void 0;
-const reqres_1 = require("@/libs/reqres");
+const reqest_1 = require("@/libs/reqest");
 const productCategoryService = __importStar(require("../services/productCategory.service"));
 // to create a Product Category
 /**
@@ -70,13 +70,13 @@ const productCategoryService = __importStar(require("../services/productCategory
  *               slug:
  *                 type: string
  *                 required: true
- *               company_id:
+ *               companyId:
  *                 type: string
  *                 format: objectId
  *             required:
  *               - name
  *               - slug
- *               - company_id
+ *               - companyId
  *     responses:
  *       200:
  *         description: created product category.
@@ -91,10 +91,10 @@ const createProductCategory = (req, res) => __awaiter(void 0, void 0, void 0, fu
     try {
         const data = req.body;
         const productCategory = yield productCategoryService.createProductCategory(data, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
-        (0, reqres_1.sendSuccessResponse)(res, productCategory);
+        (0, reqest_1.sendSuccessResponse)(res, productCategory);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status || 500, error.message || "internal server error");
+        (0, reqest_1.sendResponseWithMessage)(res, error.status || 500, error.message || "internal server error");
     }
 });
 exports.createProductCategory = createProductCategory;
@@ -147,10 +147,10 @@ const updateProductCategory = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const data = req.body;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         const updatedProductCategory = yield productCategoryService.updateProductCategory(productCategoryId, data, userId);
-        (0, reqres_1.sendSuccessResponse)(res, updatedProductCategory);
+        (0, reqest_1.sendSuccessResponse)(res, updatedProductCategory);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status, error.message);
+        (0, reqest_1.sendResponseWithMessage)(res, error.status, error.message);
     }
 });
 exports.updateProductCategory = updateProductCategory;
@@ -183,12 +183,12 @@ exports.updateProductCategory = updateProductCategory;
  */
 const getProductCategoriesByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const companyId = req.params.companyId;
+        const companyId = req.params.id;
         const productCategories = yield productCategoryService.getProductCategoriesByCompanyId(companyId);
-        (0, reqres_1.sendSuccessResponse)(res, productCategories);
+        (0, reqest_1.sendSuccessResponse)(res, productCategories);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, 500, "internal server error");
+        (0, reqest_1.sendResponseWithMessage)(res, 500, "internal server error");
     }
 });
 exports.getProductCategoriesByCompanyId = getProductCategoriesByCompanyId;
@@ -224,10 +224,10 @@ const getProductCategoryById = (req, res) => __awaiter(void 0, void 0, void 0, f
         const productCategoryId = req.params.id;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         const productCategory = yield productCategoryService.getProductCategoryById(productCategoryId);
-        (0, reqres_1.sendSuccessResponse)(res, productCategory);
+        (0, reqest_1.sendSuccessResponse)(res, productCategory);
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status, error.message);
+        (0, reqest_1.sendResponseWithMessage)(res, error.status, error.message);
     }
 });
 exports.getProductCategoryById = getProductCategoryById;
@@ -263,10 +263,10 @@ const deleteProductCategory = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const productCategoryId = req.params.id;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         yield productCategoryService.deleteProductCategory(productCategoryId, userId);
-        (0, reqres_1.sendResponseWithMessage)(res, 200, "product category deleted successfully");
+        (0, reqest_1.sendResponseWithMessage)(res, 200, "product category deleted successfully");
     }
     catch (error) {
-        (0, reqres_1.sendResponseWithMessage)(res, error.status, error.message);
+        (0, reqest_1.sendResponseWithMessage)(res, error.status, error.message);
     }
 });
 exports.deleteProductCategory = deleteProductCategory;

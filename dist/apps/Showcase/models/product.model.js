@@ -47,19 +47,19 @@ const productSchema = new mongoose_1.Schema({
     description: {
         type: String
     },
-    original_price: {
+    originalPrice: {
         type: Number,
     },
     price: {
         type: Number,
         required: true
     },
-    company_id: {
+    company: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Company",
         required: true
     },
-    product_category_id: {
+    productCategory: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "ProductCategory",
         required: true
