@@ -30,6 +30,7 @@ app_1.default.get('/api-doc', (0, redoc_express_1.default)({
 app_1.default.get('/swagger.json', (req, res) => {
     res.setHeader('Cache-Control', 'no-store');
     res.json((0, swagger_jsdoc_1.default)(options));
+    // res.json(swaggerSpec);
 });
 // Start the Express server
 // uncomment this code while running in local-------------------

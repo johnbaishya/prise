@@ -4,6 +4,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 import redoc from "redoc-express";
 import swaggerDoc from "./swagger.json";
 import swaggerJSDoc from "swagger-jsdoc";
+import swaggerSpec from "./swagger";
 
 // const PORT = config.port || 3000;
 const PORT:number = parseInt(process.env.PORT||"3000", 10);
@@ -33,6 +34,7 @@ app.get('/api-doc', redoc({
 app.get('/swagger.json', (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.json(swaggerJSDoc(options));
+  // res.json(swaggerSpec);
 });
 
 
