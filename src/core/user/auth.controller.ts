@@ -14,6 +14,7 @@ import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from 
 import { MulterImageFile } from "../../modules/Common/types/FileTypes";
 import { OAuth2Client } from "google-auth-library";
 import axios from "axios";
+import { IUser } from "./user.types";
 
 
 
@@ -169,16 +170,16 @@ export const userLogin = async(req:Request,res:Response)=>{
  
        // save user token
        user.token = token;
-       let newUser  = {
+       let newUser:IUser  = {
          id:user.id,
          first_name:user.first_name,
          last_name:user.last_name,
          email:user.email,
-         token:token,
+         profile_pic:user.profile_pic,
      };
  
        // user
-       res.status(200).json(newUser);
+       res.status(200).json({user:newUser,token});
      }else{
        res.status(400).send("Invalid Credentials");
      }

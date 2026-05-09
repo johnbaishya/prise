@@ -158,13 +158,13 @@ describe("productTag.service", () => {
         it("should return product tags for valid company", () => __awaiter(void 0, void 0, void 0, function* () {
             companyService.checkifCompanyExists.mockResolvedValue(true);
             productTag_model_1.default.find.mockResolvedValue([mockProductTag]);
-            const result = yield productTagService.getProductTagsByCompanyId(mockCompanyId);
+            const result = yield productTagService.getProductTagsByCompanyId(mockCompanyId, {});
             expect(result).toEqual([mockProductTag]);
             expect(productTag_model_1.default.find).toHaveBeenCalledWith({ company_id: mockCompanyId });
         }));
         it("should throw 404 if company does not exist", () => __awaiter(void 0, void 0, void 0, function* () {
             companyService.checkifCompanyExists.mockResolvedValue(false);
-            yield expect(productTagService.getProductTagsByCompanyId(mockCompanyId)).rejects.toMatchObject({
+            yield expect(productTagService.getProductTagsByCompanyId(mockCompanyId, {})).rejects.toMatchObject({
                 message: "Company not found",
                 status: 404,
             });

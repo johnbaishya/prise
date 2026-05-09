@@ -1,7 +1,7 @@
 import { checkCompanyOwnershipByCompanyId } from "@/core/company/company.service";
 import Product from "../models/product.model";
-import { CreateProductDTO, ListProductsQueryDTO, UpdateProductDTO } from "../schema/product.schema";
-import { IProduct, IProductWithGallery } from "../types/showcase.interface";
+import { CreateProductDTO, ListProductsQueryDTO, UpdateProductDTO } from "@/Types/request/showcase-request";
+import { IProduct, IProductWithGallery } from "../../../Types/entities/showcase-entity";
 import { verifyProductCategoryofCompany } from "./productCategory.service";
 import app from "@/app";
 import AppError from "@/libs/errorHandler";
@@ -10,6 +10,7 @@ import { addGalleryImages, deleteMultipleGalleryImagesByEntityId, getGalleryImag
 import { EntityType, IGallery, MulterImageFile } from "@/core/gallery/gallery.types";
 import { verify } from "crypto";
 import Gallery from "@/core/gallery/gallery.model";
+import { ListProductResponse } from "@/Types/response/showcase-response";
 
 
 
@@ -317,7 +318,7 @@ export const deleteProduct = async (id: string, userId: string): Promise<void> =
 export const listProducts = async (
   companyId:string,
   query: ListProductsQueryDTO
-) => {
+):Promise<ListProductResponse> => {
   try {
     
     const {
@@ -384,7 +385,8 @@ export const listProducts = async (
     const productsWithGallery = products.map(product => ({
       ...product,
       gallery: galleryMap.get(product._id.toString()) || []
-    }));
+    })) as IProductWithGallery[];
+    
       
     const total = await Product.countDocuments(filter);
     return {

@@ -3,10 +3,10 @@ import * as productService from "@/apps/Showcase/services/product.service";
 import { UserRequest } from "@/Types/request";
 import Company from "@/core/company/company.model";
 import { checkOwnership } from "@/libs/auth";
-import { CreateProductDTO, ListProductsQueryDTO, UpdateProductDTO } from "../schema/product.schema";
+import { CreateProductDTO, ListProductsQueryDTO, UpdateProductDTO } from "@/Types/request/showcase-request";
 import { sendErrorResponse, sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import { MulterImageFile } from "@/core/gallery/gallery.types";
-import { IProductWithGallery } from "../types/showcase.interface";
+import { IProductWithGallery } from "../../../Types/entities/showcase-entity";
 import { send } from "process";
 
 
@@ -127,7 +127,7 @@ export const updateProduct = async (req: UserRequest, res: Response) => {
     const productId = req.params.id;
     const data: UpdateProductDTO = req.body;
     const userId = req.user?.id!;
-    const updatedProduct = await productService.updateProduct(productId, data, userId);
+    const updatedProduct:IProductWithGallery = await productService.updateProduct(productId, data, userId);
     sendSuccessResponse(res, updatedProduct);
   } catch (error: any) {
     res.status(error.status || 500).json({ message: error.message });

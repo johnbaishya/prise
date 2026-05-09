@@ -1,8 +1,9 @@
 import { userTokenPayload } from "@/Types/auth";
 import { Document, Types } from "mongoose";
 import {z} from "zod";
-import { CreateProductDTO } from "../schema/product.schema";
+
 import { IGallery } from "@/core/gallery/gallery.types";
+import { CreateProductDTO } from "../request/showcase-request";
 
 
 
@@ -35,6 +36,7 @@ export interface IProductTag extends Document {
   description?: string;
   company: Types.ObjectId;
 }
+
 
 export interface IProductWithGallery extends IProduct {
   gallery:IGallery[];

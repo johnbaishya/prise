@@ -1,10 +1,11 @@
 import ProductCategory from "../models/productCategory.model";
-import { createProductCategoryDTO, updateProductCategoryDTO } from "../schema/productCategory.schema";
-import { IProductCategory } from "../types/showcase.interface";
+import { IProductCategory } from "../../../Types/entities/showcase-entity";
 import { check } from "zod";
 import { get } from "http";
 import Product from "../models/product.model";
 import { checkCompanyOwnershipByCompanyId, checkifCompanyExists } from "@/core/company/company.service";
+import { createProductCategoryDTO, ListProductCategoryQueryDTO, updateProductCategoryDTO } from "@/Types/request/showcase-request";
+import { ListProductCategoryResponse } from "@/Types/response/showcase-response";
 
 
 
@@ -105,8 +106,34 @@ export const createProductCategory = async (data:createProductCategoryDTO,userId
 
 // ===========================================================================================================================
 // function to get product categories by company id 
-export const getProductCategoriesByCompanyId = async (companyId:string):Promise<IProductCategory[]>=>{
+export const getProductCategoriesByCompanyId = async (
+    companyId:string,
+    query:ListProductCategoryQueryDTO
+):Promise<ListProductCategoryResponse>=>{
     try {
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            sortBy = "createdAt",
+            order = "desc"
+        } = query;
+
+        // build the filter obhject and make sure to list the categories only of a company
+        const filter: any = { company: companyId };
+
+        // 🔍 search
+        // search from the name or the desctiption of the category
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        // to skip the data of previous pages and get the data of the current page
+        const skip = (page - 1) * limit;
+
         const companyExist = await checkifCompanyExists(companyId);
         if (!companyExist) {
             const error = new Error("Company not found");
@@ -114,8 +141,26 @@ export const getProductCategoriesByCompanyId = async (companyId:string):Promise<
             throw error;
         }
 
-        const productCategories:IProductCategory[] = await ProductCategory.find({company:companyId});   
-        return productCategories;
+        // const productCategories:IProductCategory[] = await ProductCategory.find({company:companyId});   
+
+        const productCategories = await ProductCategory.find(filter)
+            .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean<IProductCategory[]>();
+
+        const total = await ProductCategory.countDocuments(filter);
+
+        const response:ListProductCategoryResponse = {
+            data: productCategories,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
+         return response;
     } catch (error) {
         throw error
     }

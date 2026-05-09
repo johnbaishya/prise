@@ -3,6 +3,7 @@ import { Response } from "express";
 import { createProductTagDTO } from "../schema/productTag.schema";
 import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import * as productTagService from "../services/productTag.service";
+import { ListProductTagQueryDTO } from "@/Types/request/showcase-request";
 
 // to create a Product Tag
 /**
@@ -139,7 +140,8 @@ export const updateProductTag = async(req: UserRequest, res: Response) => {
 export const getProductTagsByCompanyId = async(req: UserRequest, res: Response) => {
     try {
         const companyId = req.params.id;
-        const productTags = await productTagService.getProductTagsByCompanyId(companyId);
+        const query:ListProductTagQueryDTO = req.query
+        const productTags = await productTagService.getProductTagsByCompanyId(companyId,query);
         sendSuccessResponse(res, productTags);
     } catch (error) {
         sendResponseWithMessage(res, 500, "internal server error");

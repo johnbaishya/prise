@@ -183,7 +183,8 @@ exports.updateProductTag = updateProductTag;
 const getProductTagsByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const companyId = req.params.id;
-        const productTags = yield productTagService.getProductTagsByCompanyId(companyId);
+        const query = req.query;
+        const productTags = yield productTagService.getProductTagsByCompanyId(companyId, query);
         (0, reqest_1.sendSuccessResponse)(res, productTags);
     }
     catch (error) {

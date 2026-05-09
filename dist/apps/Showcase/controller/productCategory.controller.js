@@ -48,7 +48,7 @@ const productCategoryService = __importStar(require("../services/productCategory
 // to create a Product Category
 /**
  * @swagger
- * /api/product-category:
+ * /api/showcase/product-category:
  *   post:
  *     security:
  *       - bearerAuth: []
@@ -157,7 +157,7 @@ exports.updateProductCategory = updateProductCategory;
 /**
  *
  * @swagger
- * /api/product-category/company/{companyId}:
+ * /api/showcase/company/{companyId}/product-category:
  *   get:
  *     security:
  *       - bearerAuth: []
@@ -184,7 +184,8 @@ exports.updateProductCategory = updateProductCategory;
 const getProductCategoriesByCompanyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const companyId = req.params.id;
-        const productCategories = yield productCategoryService.getProductCategoriesByCompanyId(companyId);
+        const query = req.query;
+        const productCategories = yield productCategoryService.getProductCategoriesByCompanyId(companyId, query);
         (0, reqest_1.sendSuccessResponse)(res, productCategories);
     }
     catch (error) {

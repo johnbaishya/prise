@@ -144,7 +144,7 @@ describe("productTag.service", () => {
             (companyService.checkifCompanyExists as jest.Mock).mockResolvedValue(true);
             (ProductTag.find as jest.Mock).mockResolvedValue([mockProductTag]);
 
-            const result = await productTagService.getProductTagsByCompanyId(mockCompanyId);
+            const result = await productTagService.getProductTagsByCompanyId(mockCompanyId,{});
             expect(result).toEqual([mockProductTag]);
             expect(ProductTag.find).toHaveBeenCalledWith({ company_id: mockCompanyId });
         });
@@ -152,7 +152,7 @@ describe("productTag.service", () => {
         it("should throw 404 if company does not exist", async () => {
             (companyService.checkifCompanyExists as jest.Mock).mockResolvedValue(false);
 
-            await expect(productTagService.getProductTagsByCompanyId(mockCompanyId)).rejects.toMatchObject({
+            await expect(productTagService.getProductTagsByCompanyId(mockCompanyId,{})).rejects.toMatchObject({
                 message: "Company not found",
                 status: 404,
             });

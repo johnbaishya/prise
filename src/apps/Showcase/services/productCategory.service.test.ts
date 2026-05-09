@@ -5,7 +5,7 @@ import {
 } from "./productCategory.service";
 
 import ProductCategory from "../models/productCategory.model";
-import { createProductCategoryDTO, updateProductCategoryDTO } from "../schema/productCategory.schema";
+import { createProductCategoryDTO, updateProductCategoryDTO } from "@/Types/request/showcase-request";
 import { checkCompanyOwnershipByCompanyId } from "@/core/company/company.service";
 
 jest.mock("../models/productCategory.model");

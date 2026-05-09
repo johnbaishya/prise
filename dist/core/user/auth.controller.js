@@ -158,10 +158,10 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
-                token: token,
+                profile_pic: user.profile_pic,
             };
             // user
-            res.status(200).json(newUser);
+            res.status(200).json({ user: newUser, token });
         }
         else {
             res.status(400).send("Invalid Credentials");

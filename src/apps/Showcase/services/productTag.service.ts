@@ -1,8 +1,10 @@
 import { checkCompanyOwnershipByCompanyId, checkifCompanyExists } from "@/core/company/company.service";
 import { createProductTagDTO, updateProductTagDTO } from "../schema/productTag.schema";
-import { IProductTag } from "../types/showcase.interface";
+import { IProductTag } from "../../../Types/entities/showcase-entity";
 import ProductTag from "../models/productTag.model";
 import { th } from "zod/v4/locales";
+import { ListProductTagQueryDTO } from "@/Types/request/showcase-request";
+import { ListProductTagResponse } from "@/Types/response/showcase-response";
 
 
 // function to check if product tag exists by id
@@ -110,16 +112,63 @@ export const deleteProductTag = async (id: string,userId:string): Promise<IProdu
 
 
 
-export const getProductTagsByCompanyId = async (companyId:string):Promise<IProductTag[]>=>{
+export const getProductTagsByCompanyId = async (
+    companyId:string,
+    query:ListProductTagQueryDTO
+):Promise<ListProductTagResponse>=>{
     try {
+
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            sortBy = "createdAt",
+            order = "desc"
+        } = query;
+
+
+         // build the filter obhject and make sure to list the categories only of a company
+        const filter: any = { company: companyId };
+
+        // 🔍 search
+        // search from the name or the desctiption of the category
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        // to skip the data of previous pages and get the data of the current page
+        const skip = (page - 1) * limit;
+
+        
         const companyExist = await checkifCompanyExists(companyId);
         if (!companyExist) {
             const error = new Error("Company not found");
             (error as any).status = 404;
             throw error;
         }
-        const productTags:IProductTag[] = await ProductTag.find({company:companyId});
-        return productTags;
+        // const productTags:IProductTag[] = await ProductTag.find({company:companyId});
+
+        const productTags= await ProductTag.find(filter)
+            .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean<IProductTag[]>();
+
+        const total = await ProductTag.countDocuments(filter);
+
+        const response:ListProductTagResponse = {
+            data:productTags,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            }
+        }
+        return response;
     } catch (error) {
         throw error;
     }   

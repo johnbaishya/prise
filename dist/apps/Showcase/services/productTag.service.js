@@ -99,16 +99,44 @@ const deleteProductTag = (id, userId) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.deleteProductTag = deleteProductTag;
-const getProductTagsByCompanyId = (companyId) => __awaiter(void 0, void 0, void 0, function* () {
+const getProductTagsByCompanyId = (companyId, query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { page = 1, limit = 10, search, sortBy = "createdAt", order = "desc" } = query;
+        // build the filter obhject and make sure to list the categories only of a company
+        const filter = { company: companyId };
+        // 🔍 search
+        // search from the name or the desctiption of the category
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } }
+            ];
+        }
+        // to skip the data of previous pages and get the data of the current page
+        const skip = (page - 1) * limit;
         const companyExist = yield (0, company_service_1.checkifCompanyExists)(companyId);
         if (!companyExist) {
             const error = new Error("Company not found");
             error.status = 404;
             throw error;
         }
-        const productTags = yield productTag_model_1.default.find({ company: companyId });
-        return productTags;
+        // const productTags:IProductTag[] = await ProductTag.find({company:companyId});
+        const productTags = yield productTag_model_1.default.find(filter)
+            .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+        const total = yield productTag_model_1.default.countDocuments(filter);
+        const response = {
+            data: productTags,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
+        return response;
     }
     catch (error) {
         throw error;

@@ -1,6 +1,6 @@
 import { UserRequest } from "@/Types/request";
 import { Response } from "express";
-import { createProductCategoryDTO } from "../schema/productCategory.schema";
+import { createProductCategoryDTO, ListProductCategoryQueryDTO } from "@/Types/request/showcase-request";
 import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import ProductCategory from "../models/productCategory.model";
 import * as productCategoryService from "../services/productCategory.service";
@@ -14,7 +14,7 @@ import * as productCategoryService from "../services/productCategory.service";
 // to create a Product Category
 /**
  * @swagger
- * /api/product-category:
+ * /api/showcase/product-category:
  *   post:
  *     security:
  *       - bearerAuth: []
@@ -144,7 +144,7 @@ export const updateProductCategory = async(req:UserRequest,res:Response)=>{
 /**
  * 
  * @swagger
- * /api/product-category/company/{companyId}:
+ * /api/showcase/company/{companyId}/product-category:
  *   get:
  *     security:
  *       - bearerAuth: []
@@ -171,7 +171,8 @@ export const updateProductCategory = async(req:UserRequest,res:Response)=>{
 export const getProductCategoriesByCompanyId = async(req:UserRequest,res:Response)=>{
     try {
         const companyId = req.params.id;
-        const productCategories = await productCategoryService.getProductCategoriesByCompanyId(companyId);
+        const query:ListProductCategoryQueryDTO = req.query
+        const productCategories = await productCategoryService.getProductCategoriesByCompanyId(companyId,query);
         sendSuccessResponse(res,productCategories);
     } catch (error) {
         sendResponseWithMessage(res,500,"internal server error");
