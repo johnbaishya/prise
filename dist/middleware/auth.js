@@ -8,6 +8,12 @@ const config = process.env;
 const verifyToken = (req, res, next) => {
     let token;
     const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+        res.status(401).json({
+            message: "Authorization header missing",
+        });
+        return;
+    }
     // if (authHeader && authHeader.startsWith("Bearer ")) {
     token = authHeader.split(" ")[1]; // Extract the token part
     // } else {

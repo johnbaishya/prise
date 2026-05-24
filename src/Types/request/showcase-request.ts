@@ -4,8 +4,8 @@ export const createProductSchema = z.object({
   name: z.string(),
   slug: z.string(),
   description: z.string().optional(),
-  originalPrice: z.number().optional(),
-  price: z.number(),
+  originalPrice: z.coerce.number().optional(),
+  price: z.coerce.number(),
   companyId: z.string(),
   productCategoryId: z.string(),
   tags: z.array(z.string()).optional(),
@@ -42,7 +42,7 @@ export const listProductsQuerySchema = z.object({
     tag: z.string().optional(),
     category: z.string().optional(),
     
-    sortBy: z.enum(["createdAt", "price"]).default("createdAt").optional(),
+    sortBy: z.enum(["createdAt", "price","name"]).default("createdAt").optional(),
     order: z.enum(["asc", "desc"]).default("desc").optional(),
 });
 
@@ -55,12 +55,14 @@ export const createProductCategorySchema = z.object({
     slug: z.string(),
     description: z.string().optional(),
     companyId: z.string(),
+    image:z.string().optional(),
 });
 
 export const updateProductCategorySchema = z.object({
     name: z.string().optional(),
     slug: z.string().optional(),
     description: z.string().optional(),
+    image:z.string().optional(),
 });
 
 

@@ -5,12 +5,14 @@ export const createProductTagSchema = z.object({
   slug: z.string(),
   description: z.string().optional(),
   companyId: z.string(),
+  image:z.string().optional(),
 });
 
 export const updateProductTagSchema = z.object({
   name: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
+  image:z.string().optional(),
 });
 
 export type createProductTagDTO = z.infer<typeof createProductTagSchema>;

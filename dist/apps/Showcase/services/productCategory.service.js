@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProductCategory = exports.updateProductCategory = exports.getProductCategoryById = exports.getProductCategoriesByCompanyId = exports.createProductCategory = exports.checkProductCategoryOwnership = exports.getProductCategoryWithOwnershipAndExistance = exports.verifyProductCategoryofCompany = exports.checkProductCategoryExists = void 0;
+exports.deleteProductCategory = exports.updateProductCategory = exports.getProductCategoryById = exports.getProductCategoriesByCompanyId = exports.createProductCategory = exports.updateProductCategoryImage = exports.checkProductCategoryOwnership = exports.getProductCategoryWithOwnershipAndExistance = exports.verifyProductCategoryofCompany = exports.checkProductCategoryExists = void 0;
 const productCategory_model_1 = __importDefault(require("../models/productCategory.model"));
 const company_service_1 = require("@/core/company/company.service");
+const errorHandler_1 = __importDefault(require("@/libs/errorHandler"));
 // function to check if product category exists by id
 const checkProductCategoryExists = (productCategoryId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -78,15 +79,39 @@ const checkProductCategoryOwnership = (productCategoryId, userId) => __awaiter(v
     }
 });
 exports.checkProductCategoryOwnership = checkProductCategoryOwnership;
+// =======================================================================================================
+// function to upload the image of the product Category
+const updateProductCategoryImage = (file, categoryId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!file) {
+            const error = new errorHandler_1.default("no image ", 400);
+            throw error;
+        }
+        const category = yield productCategory_model_1.default.findByIdAndUpdate(categoryId, { image: file.location }, { new: true });
+        if (!category) {
+            const error = new errorHandler_1.default("Product Category not found ", 500);
+            throw error;
+        }
+        return category;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.updateProductCategoryImage = updateProductCategoryImage;
 // ===========================================================================================================================
 // function to create a product category with company ownership check
-const createProductCategory = (data, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const createProductCategory = (data, userId, file) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, data.companyId);
         if (!isOwner) {
             const error = new Error("You are not authorized to create a product category for this company");
             error.status = 403;
             throw error;
+        }
+        if (file) {
+            const imageUrl = file.location;
+            data.image = imageUrl;
         }
         const payload = Object.assign(Object.assign({}, data), { company: data.companyId });
         const productCategory = yield productCategory_model_1.default.create(payload);
@@ -161,11 +186,16 @@ const getProductCategoryById = (id) => __awaiter(void 0, void 0, void 0, functio
 exports.getProductCategoryById = getProductCategoryById;
 // ==========================================================================================================================
 // function to update product category by id with company ownership check
-const updateProductCategory = (productCategoryId, data, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const updateProductCategory = (productCategoryId, data, userId, file) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, slug, description } = data;
+        let newData = { name, slug, description };
+        if (file) {
+            const imageUri = file.location;
+            newData.image = imageUri;
+        }
         yield (0, exports.getProductCategoryWithOwnershipAndExistance)(productCategoryId, userId);
-        const updatedProductCategory = yield productCategory_model_1.default.findByIdAndUpdate(productCategoryId, { name, slug, description }, { new: true });
+        const updatedProductCategory = yield productCategory_model_1.default.findByIdAndUpdate(productCategoryId, newData, { new: true });
         return updatedProductCategory;
     }
     catch (error) {

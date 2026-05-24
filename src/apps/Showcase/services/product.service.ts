@@ -179,16 +179,26 @@ export const createProduct = async (data: CreateProductDTO,userId:string, imageF
   try {
     // check user eligibility to create a product for the company by checking if they are the owner of the company and if the category and tags belong to the company
     await verifyProductCreationEligibilityForUser(userId,companyId,productCategoryId,tags);
-    const product = await Product.create(data);
+    const mdata = {
+      productCategory:productCategoryId,
+      company:companyId
+    }
+
+    const payload = {...data,...mdata};
+    const product = await Product.create(payload);
 
     // if images are provided, add them to the gallery of the product
-    const gallery = await addGalleryImages(EntityType.Product,product._id.toString(),imageFiles??[]);
+    let gallery:IGallery[] = [];
+    if(imageFiles){
+      gallery = await addGalleryImages(EntityType.Product,product._id.toString(),imageFiles??[]);
+    }
 
     return{
       ...product.toObject(),
       gallery:gallery
     } as IProductWithGallery;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -219,7 +229,7 @@ export const updateProduct = async (id: string, data: Partial<UpdateProductDTO>,
     }
     const gallery = await getGalleryImages(EntityType.Product,id);
     return {
-      ...product?.toObject(),
+      ...product,
       gallery:gallery
     } as IProductWithGallery;
   } catch (error) {
@@ -355,6 +365,8 @@ export const listProducts = async (
     const skip = (page - 1) * limit;
   
     const products = await Product.find(filter)
+    .populate("productCategory")   // 👈 category
+    .populate("tags")              // 👈 tags
     .sort({ [sortBy]: order === "asc" ? 1 : -1 })
     .skip(skip)
     .limit(limit)

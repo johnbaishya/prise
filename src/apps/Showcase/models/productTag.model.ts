@@ -17,6 +17,9 @@ const productTagsSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"Company",
         required:true
+    },
+    image:{
+        type:String,
     }
 },{
     timestamps:true

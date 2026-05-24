@@ -90,7 +90,8 @@ const createProductCategory = (req, res) => __awaiter(void 0, void 0, void 0, fu
     var _a;
     try {
         const data = req.body;
-        const productCategory = yield productCategoryService.createProductCategory(data, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
+        const file = req.file;
+        const productCategory = yield productCategoryService.createProductCategory(data, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id, file);
         (0, reqest_1.sendSuccessResponse)(res, productCategory);
     }
     catch (error) {
@@ -146,7 +147,8 @@ const updateProductCategory = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const productCategoryId = req.params.id;
         const data = req.body;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        const updatedProductCategory = yield productCategoryService.updateProductCategory(productCategoryId, data, userId);
+        const file = req.file;
+        const updatedProductCategory = yield productCategoryService.updateProductCategory(productCategoryId, data, userId, file);
         (0, reqest_1.sendSuccessResponse)(res, updatedProductCategory);
     }
     catch (error) {

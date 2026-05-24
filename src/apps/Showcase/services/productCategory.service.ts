@@ -6,6 +6,8 @@ import Product from "../models/product.model";
 import { checkCompanyOwnershipByCompanyId, checkifCompanyExists } from "@/core/company/company.service";
 import { createProductCategoryDTO, ListProductCategoryQueryDTO, updateProductCategoryDTO } from "@/Types/request/showcase-request";
 import { ListProductCategoryResponse } from "@/Types/response/showcase-response";
+import { MulterImageFile } from "@/core/gallery/gallery.types";
+import AppError from "@/libs/errorHandler";
 
 
 
@@ -80,10 +82,32 @@ export const checkProductCategoryOwnership = async (productCategoryId:string,use
 
 
 
+// =======================================================================================================
+// function to upload the image of the product Category
+export const updateProductCategoryImage = async(file:MulterImageFile,categoryId:string):Promise<IProductCategory> =>{
+    try {
+        if(!file){
+            const error = new AppError("no image ",400)
+            throw error;
+        }
+            const category = await ProductCategory.findByIdAndUpdate(categoryId,{image:file.location},{new:true});
+            if(!category){
+                const error = new AppError("Product Category not found ",500)
+                throw error;
+            }
+            return category as IProductCategory;
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
 
 // ===========================================================================================================================
 // function to create a product category with company ownership check
-export const createProductCategory = async (data:createProductCategoryDTO,userId:string):Promise<IProductCategory>=>{
+export const createProductCategory = async (data:createProductCategoryDTO,userId:string,file?:MulterImageFile):Promise<IProductCategory>=>{
     try {
         const isOwner = await checkCompanyOwnershipByCompanyId(userId,data.companyId);
         if (!isOwner) {
@@ -91,10 +115,17 @@ export const createProductCategory = async (data:createProductCategoryDTO,userId
             (error as any).status = 403;
             throw error;
         }
+
+        if(file){
+            const imageUrl = file.location;
+            data.image = imageUrl;
+        }
+
         const payload = {
             ...data,
             company:data.companyId
         }
+
         const productCategory:IProductCategory = await ProductCategory.create(payload); 
         return productCategory;
     } catch (error) {
@@ -187,11 +218,16 @@ export const getProductCategoryById = async (id:string):Promise<IProductCategory
 
 // ==========================================================================================================================
 // function to update product category by id with company ownership check
-export const updateProductCategory = async (productCategoryId:string,data:updateProductCategoryDTO,userId:string):Promise<IProductCategory>=>{
+export const updateProductCategory = async (productCategoryId:string,data:updateProductCategoryDTO,userId:string,file?:MulterImageFile):Promise<IProductCategory>=>{
     try {
         const {name,slug,description} = data
+        let newData:updateProductCategoryDTO = {name,slug,description}
+        if(file){
+            const imageUri = file.location;
+            newData.image = imageUri
+        }
         await getProductCategoryWithOwnershipAndExistance(productCategoryId,userId);
-        const updatedProductCategory = await ProductCategory.findByIdAndUpdate(productCategoryId,{name,slug,description},{new:true});
+        const updatedProductCategory = await ProductCategory.findByIdAndUpdate(productCategoryId,newData,{new:true});
         return updatedProductCategory;
     } catch (error) {
         throw error

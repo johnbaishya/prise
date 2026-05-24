@@ -64,23 +64,37 @@ const checkProductTagOwnership = (productTagId, userId) => __awaiter(void 0, voi
 exports.checkProductTagOwnership = checkProductTagOwnership;
 // ===========================================================================================================================
 // function to create a product tag with company ownership check
-const createProductTag = (data, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const { companyId } = data;
-    const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, companyId);
-    if (!isOwner) {
-        const error = new Error("You are not authorized to create a product tag for this company");
-        error.status = 403;
+const createProductTag = (data, userId, file) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { companyId } = data;
+        const isOwner = yield (0, company_service_1.checkCompanyOwnershipByCompanyId)(userId, companyId);
+        if (!isOwner) {
+            const error = new Error("You are not authorized to create a product tag for this company");
+            error.status = 403;
+            throw error;
+        }
+        let newData = Object.assign({}, data);
+        if (!!file) {
+            newData.image = file.location;
+        }
+        const payload = Object.assign(Object.assign({}, newData), { company: newData.companyId });
+        const productTag = yield productTag_model_1.default.create(payload);
+        return productTag;
+    }
+    catch (error) {
         throw error;
     }
-    const productTag = yield productTag_model_1.default.create(data);
-    return productTag;
 });
 exports.createProductTag = createProductTag;
-const updateProductTag = (id, data, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const updateProductTag = (id, data, userId, file) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, slug, description } = data;
         yield (0, exports.getProductTagWithOwnershipAndExistance)(id, userId);
-        const updatedProductTag = yield productTag_model_1.default.findByIdAndUpdate(id, { name, slug, description }, { new: true });
+        let newData = { name, slug, description };
+        if (!!file) {
+            newData.image = file.location;
+        }
+        const updatedProductTag = yield productTag_model_1.default.findByIdAndUpdate(id, newData, { new: true });
         return updatedProductTag;
     }
     catch (error) {

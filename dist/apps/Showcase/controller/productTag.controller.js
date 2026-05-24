@@ -89,11 +89,14 @@ const createProductTag = (req, res) => __awaiter(void 0, void 0, void 0, functio
     var _a;
     try {
         const data = req.body;
-        const productTag = yield productTagService.createProductTag(data, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
+        const file = req.file;
+        const productTag = yield productTagService.createProductTag(data, (_a = req.user) === null || _a === void 0 ? void 0 : _a.id, file);
         (0, reqest_1.sendSuccessResponse)(res, productTag);
     }
     catch (error) {
-        (0, reqest_1.sendResponseWithMessage)(res, error.status || 500, error.message || "internal server error");
+        (0, reqest_1.sendResponseWithMessage)(res, error.status || 500, error._message || "internal server error");
+        // sendResponseWithMessage(res, error.status || 500, error.message || "internal server error");
+        throw error;
     }
 });
 exports.createProductTag = createProductTag;
@@ -144,8 +147,9 @@ const updateProductTag = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const productTagId = req.params.id;
         const data = req.body;
+        const file = req.file;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        const updatedProductTag = yield productTagService.updateProductTag(productTagId, data, userId);
+        const updatedProductTag = yield productTagService.updateProductTag(productTagId, data, userId, file);
         (0, reqest_1.sendSuccessResponse)(res, updatedProductTag);
     }
     catch (error) {

@@ -4,6 +4,7 @@ import { createProductCategoryDTO, ListProductCategoryQueryDTO } from "@/Types/r
 import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import ProductCategory from "../models/productCategory.model";
 import * as productCategoryService from "../services/productCategory.service";
+import { MulterImageFile } from "@/core/gallery/gallery.types";
 
 
 
@@ -55,7 +56,8 @@ import * as productCategoryService from "../services/productCategory.service";
 export const createProductCategory = async(req:UserRequest,res:Response)=>{
     try {
         const data:createProductCategoryDTO = req.body;
-        const productCategory = await productCategoryService.createProductCategory(data,req.user?.id!);
+        const file = req.file as MulterImageFile
+        const productCategory = await productCategoryService.createProductCategory(data,req.user?.id!,file);
         sendSuccessResponse(res,productCategory)
     } catch (error: any) {
         sendResponseWithMessage(res,error.status || 500,error.message || "internal server error");
@@ -120,7 +122,8 @@ export const updateProductCategory = async(req:UserRequest,res:Response)=>{
     const data:createProductCategoryDTO = req.body;
     
     const userId = req.user?.id!;
-    const updatedProductCategory = await productCategoryService.updateProductCategory(productCategoryId,data,userId);
+    const file = req.file as MulterImageFile
+    const updatedProductCategory = await productCategoryService.updateProductCategory(productCategoryId,data,userId,file);
     sendSuccessResponse(res,updatedProductCategory);
 
  } catch (error: any) {

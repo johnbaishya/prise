@@ -10,30 +10,23 @@ const productCategory_controller_1 = require("./controller/productCategory.contr
 const uploadImage_1 = __importDefault(require("@/middleware/uploadImage"));
 const productTag_controller_1 = require("./controller/productTag.controller");
 const router = (0, express_1.Router)();
-const authorizedRouter = (0, express_1.Router)();
-authorizedRouter.use(auth_1.default);
-// routes for product
-authorizedRouter.post("/product", uploadImage_1.default.array('images'), product_controller_1.createProduct);
-authorizedRouter.put("/product/:id", product_controller_1.updateProduct);
-authorizedRouter.delete("/product/:id", product_controller_1.deleteProduct);
-authorizedRouter.post("/product/:id/gallery", uploadImage_1.default.array("images"), product_controller_1.addProductGallery);
+// product routes
+router.post("/product", [auth_1.default, uploadImage_1.default.array('images')], product_controller_1.createProduct);
+router.put("/product/:id", auth_1.default, product_controller_1.updateProduct);
+router.delete("/product/:id", auth_1.default, product_controller_1.deleteProduct);
+router.post("/product/:id/gallery", [auth_1.default, uploadImage_1.default.array("images")], product_controller_1.addProductGallery);
 router.get("/product/:id", product_controller_1.getProductDetail);
 router.get("/company/:id/products", product_controller_1.getProductsbyCompanyId);
 // routes for product category
-authorizedRouter.post("/product-category", productCategory_controller_1.createProductCategory);
-authorizedRouter.put("/product-category/:id", productCategory_controller_1.updateProductCategory);
+router.post("/product-category", [auth_1.default, uploadImage_1.default.single("image")], productCategory_controller_1.createProductCategory);
+router.put("/product-category/:id", [auth_1.default, uploadImage_1.default.single("image")], productCategory_controller_1.updateProductCategory);
+router.delete("/product-category/:id", auth_1.default, productCategory_controller_1.deleteProductCategory);
 router.get("/company/:id/product-category", productCategory_controller_1.getProductCategoriesByCompanyId);
 router.get("/product-category/:id", productCategory_controller_1.getProductCategoryById);
-authorizedRouter.delete("/product-category/:id", productCategory_controller_1.deleteProductCategory);
 // routes for product tag
-authorizedRouter.post("/product-tag", productTag_controller_1.createProductTag);
-authorizedRouter.put("/product-tag/:id", productTag_controller_1.updateProductTag);
+router.post("/product-tag", [auth_1.default, uploadImage_1.default.single("image")], productTag_controller_1.createProductTag);
+router.put("/product-tag/:id", [auth_1.default, uploadImage_1.default.single("image")], productTag_controller_1.updateProductTag);
+router.delete("/product-tag/:id", auth_1.default, productTag_controller_1.deleteProductTag);
 router.get("/company/:id/product-tag", productTag_controller_1.getProductTagsByCompanyId);
 router.get("/product-tag/:id", productTag_controller_1.getProductTagById);
-authorizedRouter.delete("/product-tag/:id", productTag_controller_1.deleteProductTag);
-// Combine both routers into one
-const combinedRouter = (0, express_1.Router)();
-combinedRouter.use(authorizedRouter);
-combinedRouter.use(router);
-const showcaseRoutes = combinedRouter;
-exports.default = showcaseRoutes;
+exports.default = router;

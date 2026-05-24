@@ -123,12 +123,21 @@ const createProduct = (data, userId, imageFiles) => __awaiter(void 0, void 0, vo
     try {
         // check user eligibility to create a product for the company by checking if they are the owner of the company and if the category and tags belong to the company
         yield (0, exports.verifyProductCreationEligibilityForUser)(userId, companyId, productCategoryId, tags);
-        const product = yield product_model_1.default.create(data);
+        const mdata = {
+            productCategory: productCategoryId,
+            company: companyId
+        };
+        const payload = Object.assign(Object.assign({}, data), mdata);
+        const product = yield product_model_1.default.create(payload);
         // if images are provided, add them to the gallery of the product
-        const gallery = yield (0, gallery_service_1.addGalleryImages)(gallery_types_1.EntityType.Product, product._id.toString(), imageFiles !== null && imageFiles !== void 0 ? imageFiles : []);
+        let gallery = [];
+        if (imageFiles) {
+            gallery = yield (0, gallery_service_1.addGalleryImages)(gallery_types_1.EntityType.Product, product._id.toString(), imageFiles !== null && imageFiles !== void 0 ? imageFiles : []);
+        }
         return Object.assign(Object.assign({}, product.toObject()), { gallery: gallery });
     }
     catch (error) {
+        console.log(error);
         throw error;
     }
 });
@@ -144,7 +153,7 @@ const updateProduct = (id, data, userId) => __awaiter(void 0, void 0, void 0, fu
             throw new errorHandler_1.default("Product not found", 404);
         }
         const gallery = yield (0, gallery_service_1.getGalleryImages)(gallery_types_1.EntityType.Product, id);
-        return Object.assign(Object.assign({}, product === null || product === void 0 ? void 0 : product.toObject()), { gallery: gallery });
+        return Object.assign(Object.assign({}, product), { gallery: gallery });
     }
     catch (error) {
         throw error;
@@ -219,6 +228,8 @@ const listProducts = (companyId, query) => __awaiter(void 0, void 0, void 0, fun
         }
         const skip = (page - 1) * limit;
         const products = yield product_model_1.default.find(filter)
+            .populate("productCategory") // 👈 category
+            .populate("tags") // 👈 tags
             .sort({ [sortBy]: order === "asc" ? 1 : -1 })
             .skip(skip)
             .limit(limit)

@@ -4,6 +4,7 @@ import { createProductTagDTO } from "../schema/productTag.schema";
 import { sendResponseWithMessage, sendSuccessResponse } from "@/libs/reqest";
 import * as productTagService from "../services/productTag.service";
 import { ListProductTagQueryDTO } from "@/Types/request/showcase-request";
+import { MulterImageFile } from "@/core/gallery/gallery.types";
 
 // to create a Product Tag
 /**
@@ -48,10 +49,13 @@ import { ListProductTagQueryDTO } from "@/Types/request/showcase-request";
 export const createProductTag = async(req: UserRequest, res: Response) => {
     try {
         const data: createProductTagDTO = req.body;
-        const productTag = await productTagService.createProductTag(data, req.user?.id!);
+        const file = req.file as MulterImageFile;
+        const productTag = await productTagService.createProductTag(data, req.user?.id!,file);
         sendSuccessResponse(res, productTag);
     } catch (error: any) {
-        sendResponseWithMessage(res, error.status || 500, error.message || "internal server error");
+        sendResponseWithMessage(res, error.status || 500, error._message || "internal server error");
+        // sendResponseWithMessage(res, error.status || 500, error.message || "internal server error");
+        throw error;
     }
 }
 
@@ -101,9 +105,9 @@ export const updateProductTag = async(req: UserRequest, res: Response) => {
     try {
         const productTagId = req.params.id;
         const data: createProductTagDTO = req.body;
-        
+        const file = req.file as MulterImageFile;
         const userId = req.user?.id!;
-        const updatedProductTag = await productTagService.updateProductTag(productTagId, data, userId);
+        const updatedProductTag = await productTagService.updateProductTag(productTagId, data, userId,file);
         sendSuccessResponse(res, updatedProductTag);
     } catch (error: any) {
         sendResponseWithMessage(res, error.status, error.message);

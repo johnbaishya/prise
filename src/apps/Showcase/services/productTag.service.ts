@@ -5,6 +5,7 @@ import ProductTag from "../models/productTag.model";
 import { th } from "zod/v4/locales";
 import { ListProductTagQueryDTO } from "@/Types/request/showcase-request";
 import { ListProductTagResponse } from "@/Types/response/showcase-response";
+import { MulterImageFile } from "@/core/gallery/gallery.types";
 
 
 // function to check if product tag exists by id
@@ -67,29 +68,51 @@ export const checkProductTagOwnership = async (productTagId:string,userId:string
 
 // ===========================================================================================================================
 // function to create a product tag with company ownership check
-export const createProductTag = async (data: createProductTagDTO,userId:string): Promise<IProductTag> => {
-    const {companyId} = data;
-    const isOwner = await checkCompanyOwnershipByCompanyId(userId, companyId); 
-
-    if (!isOwner) {
-        const error = new Error("You are not authorized to create a product tag for this company");
-        (error as any).status = 403;
+export const createProductTag = async (data: createProductTagDTO,userId:string,file?:MulterImageFile): Promise<IProductTag> => {
+    
+    try {
+        const {companyId} = data;
+        const isOwner = await checkCompanyOwnershipByCompanyId(userId, companyId); 
+    
+        if (!isOwner) {
+            const error = new Error("You are not authorized to create a product tag for this company");
+            (error as any).status = 403;
+            throw error;
+        }
+    
+        let newData:createProductTagDTO = {...data}
+        if(!!file){
+            newData.image = file.location;
+        }
+    
+        const payload = {
+                ...newData,
+                company:newData.companyId
+            }
+    
+    
+        const productTag = await ProductTag.create(payload);
+        return productTag;
+        
+    } catch (error) {
         throw error;
     }
-
-    const productTag = await ProductTag.create(data);
-    return productTag;
 }
 
 
 
 
 
-export const updateProductTag = async (id: string, data: Partial<updateProductTagDTO>,userId:string): Promise<IProductTag> => {
+export const updateProductTag = async (id: string, data: Partial<updateProductTagDTO>,userId:string,file?:MulterImageFile): Promise<IProductTag> => {
     try {
         const {name,slug,description} = data
         await getProductTagWithOwnershipAndExistance(id, userId);
-        const updatedProductTag = await ProductTag.findByIdAndUpdate(id,{name,slug,description},{new:true});
+
+        let newData:updateProductTagDTO = {name,slug,description};
+        if(!!file){
+            newData.image = file.location;
+        }
+        const updatedProductTag = await ProductTag.findByIdAndUpdate(id,newData,{new:true});
         return updatedProductTag;
     } catch (error) {
         throw error;

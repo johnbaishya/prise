@@ -6,8 +6,6 @@ import uploadImage from "@/middleware/uploadImage";
 import { createProductTag, deleteProductTag, getProductTagById, getProductTagsByCompanyId, updateProductTag } from "./controller/productTag.controller";
 
 const router = Router();
-const authorizedRouter = Router();
-authorizedRouter.use(verifyToken)
 
 
 
@@ -17,11 +15,14 @@ authorizedRouter.use(verifyToken)
 
 
 
-// routes for product
-authorizedRouter.post("/product",uploadImage.array('images'), createProduct);
-authorizedRouter.put("/product/:id",updateProduct);
-authorizedRouter.delete("/product/:id",deleteProduct);
-authorizedRouter.post("/product/:id/gallery",uploadImage.array("images"),addProductGallery)
+// product routes
+router.post("/product",[verifyToken,uploadImage.array('images')], createProduct);
+router.put("/product/:id",verifyToken,updateProduct);
+router.delete("/product/:id",verifyToken,deleteProduct);
+router.post("/product/:id/gallery",[verifyToken,uploadImage.array("images")],addProductGallery)
+
+
+
 router.get("/product/:id",getProductDetail);
 router.get("/company/:id/products",getProductsbyCompanyId);
 
@@ -31,11 +32,14 @@ router.get("/company/:id/products",getProductsbyCompanyId);
 
 
 // routes for product category
-authorizedRouter.post("/product-category",createProductCategory);
-authorizedRouter.put("/product-category/:id",updateProductCategory);
+router.post("/product-category",[verifyToken,uploadImage.single("image")],createProductCategory);
+router.put("/product-category/:id",[verifyToken,uploadImage.single("image")],updateProductCategory);
+router.delete("/product-category/:id",verifyToken,deleteProductCategory);
+
+
+
 router.get("/company/:id/product-category",getProductCategoriesByCompanyId);
 router.get("/product-category/:id",getProductCategoryById);
-authorizedRouter.delete("/product-category/:id",deleteProductCategory);
 
 
 
@@ -45,23 +49,15 @@ authorizedRouter.delete("/product-category/:id",deleteProductCategory);
 
 
 // routes for product tag
-authorizedRouter.post("/product-tag",createProductTag);
-authorizedRouter.put("/product-tag/:id",updateProductTag);
+router.post("/product-tag",[verifyToken,uploadImage.single("image")],createProductTag);
+router.put("/product-tag/:id",[verifyToken,uploadImage.single("image")],updateProductTag);
+router.delete("/product-tag/:id",verifyToken,deleteProductTag);
+
+
 router.get("/company/:id/product-tag",getProductTagsByCompanyId);
 router.get("/product-tag/:id",getProductTagById);
-authorizedRouter.delete("/product-tag/:id",deleteProductTag);
 
 
 
 
-
-
-
-// Combine both routers into one
-const combinedRouter = Router();
-combinedRouter.use(authorizedRouter);
-combinedRouter.use(router);
-
-const showcaseRoutes = combinedRouter;
-
-export default showcaseRoutes;
+export default router;
