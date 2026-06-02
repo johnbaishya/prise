@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { addProductGallery, createProduct, deleteProduct, getProductDetail, getProductsbyCompanyId, updateProduct } from "./controller/product.controller";
+import { addProductGallery, createProduct, deleteProduct, getProductDetail, getProductGallery, getProductsbyCompanyId, updateProduct } from "./controller/product.controller";
 import verifyToken from "@/middleware/auth";
 import { createProductCategory, deleteProductCategory, getProductCategoriesByCompanyId, getProductCategoryById, updateProductCategory } from "./controller/productCategory.controller";
 import uploadImage from "@/middleware/uploadImage";
 import { createProductTag, deleteProductTag, getProductTagById, getProductTagsByCompanyId, updateProductTag } from "./controller/productTag.controller";
+import { addShowcaseBannerImages, getShowcaseBannerImages } from "./controller/banner.controller";
 
 const router = Router();
 
@@ -25,8 +26,7 @@ router.post("/product/:id/gallery",[verifyToken,uploadImage.array("images")],add
 
 router.get("/product/:id",getProductDetail);
 router.get("/company/:id/products",getProductsbyCompanyId);
-
-
+router.get("/product/:id/gallery",getProductGallery)
 
 
 
@@ -56,6 +56,13 @@ router.delete("/product-tag/:id",verifyToken,deleteProductTag);
 
 router.get("/company/:id/product-tag",getProductTagsByCompanyId);
 router.get("/product-tag/:id",getProductTagById);
+
+
+
+// routes for banner 
+router.post("/company/:id/banner",[verifyToken,uploadImage.array("images")],addShowcaseBannerImages);
+
+router.get("/company/:id/banner",getShowcaseBannerImages);
 
 
 

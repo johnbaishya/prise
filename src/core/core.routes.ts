@@ -14,8 +14,8 @@ router.get("/user/verify-token",verifyToken,verifyAuthentication);
 
 // routes for user
 router.get("/asd",testFunction)
-// router.post("/user/register",userRegister);
-router.post("/user/register",testFunction);
+router.post("/user/register",userRegister);
+// router.post("/user/register",testFunction);
 router.post("/user/login",userLogin);
 router.post("/user/google-login",googleLogin)
 router.post("/user/facebook-login",facebookLogin)
@@ -25,7 +25,7 @@ router.get("/user/profile",verifyToken,getUser)
 
 
 // routes for company
-router.post("/company",verifyToken,companyController.addCompany);
+router.post("/company",[verifyToken,uploadImage.single("brand_logo")],companyController.createCompany);
 router.get("/company",verifyToken,companyController.listMyCompanies);
 router.put("/company/:id",verifyToken,companyController.updateCompany);
 router.post("/company/:id/profile-pic",[verifyToken,uploadImage.single("image")],companyController.ChangeCompanyProfilePicture)

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyCompanyOwnershipByCompanyId = exports.checkCompanyOwnershipByCompanyId = exports.checkifCompanyExists = void 0;
+exports.listCompanies = exports.createCompany = exports.verifyCompanyOwnershipByCompanyId = exports.checkCompanyOwnershipByCompanyId = exports.checkifCompanyExists = void 0;
 const auth_1 = require("@/libs/auth");
 const company_model_1 = __importDefault(require("./company.model"));
 const errorHandler_1 = __importDefault(require("@/libs/errorHandler"));
@@ -69,3 +69,54 @@ const verifyCompanyOwnershipByCompanyId = (userId, companyId) => __awaiter(void 
     }
 });
 exports.verifyCompanyOwnershipByCompanyId = verifyCompanyOwnershipByCompanyId;
+const createCompany = (data, userId, image) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const payLoad = Object.assign(Object.assign({}, data), { user_id: userId });
+        if (image) {
+            payLoad.brand_logo = image.location;
+        }
+        const company = company_model_1.default.create(payLoad);
+        return company;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.createCompany = createCompany;
+const listCompanies = (userId, query) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { page = 1, limit = 10, search, sortBy = "createdAt", order = "desc" } = query;
+        const filter = { user_id: userId };
+        // 🔍 search
+        // search from the name or the desctiption of the category
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } }
+            ];
+        }
+        // to skip the data of previous pages and get the data of the current page
+        const skip = (page - 1) * limit;
+        // const productTags:IProductTag[] = await ProductTag.find({company:companyId});
+        const companies = yield company_model_1.default.find(filter)
+            .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+        const total = yield company_model_1.default.countDocuments(filter);
+        const response = {
+            data: companies,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
+        return response;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.listCompanies = listCompanies;

@@ -15,8 +15,8 @@ const router = (0, express_1.Router)();
 router.get("/user/verify-token", auth_1.default, auth_controller_1.verifyAuthentication);
 // routes for user
 router.get("/asd", testController_1.testFunction);
-// router.post("/user/register",userRegister);
-router.post("/user/register", testController_1.testFunction);
+router.post("/user/register", auth_controller_1.userRegister);
+// router.post("/user/register",testFunction);
 router.post("/user/login", auth_controller_1.userLogin);
 router.post("/user/google-login", auth_controller_1.googleLogin);
 router.post("/user/facebook-login", auth_controller_1.facebookLogin);
@@ -24,7 +24,7 @@ router.post("/user/profile-pic", [auth_1.default, uploadImage_1.default.single("
 router.put("/user/profile", auth_1.default, auth_controller_1.updateUser);
 router.get("/user/profile", auth_1.default, auth_controller_1.getUser);
 // routes for company
-router.post("/company", auth_1.default, company_controller_1.default.addCompany);
+router.post("/company", [auth_1.default, uploadImage_1.default.single("brand_logo")], company_controller_1.default.createCompany);
 router.get("/company", auth_1.default, company_controller_1.default.listMyCompanies);
 router.put("/company/:id", auth_1.default, company_controller_1.default.updateCompany);
 router.post("/company/:id/profile-pic", [auth_1.default, uploadImage_1.default.single("image")], company_controller_1.default.ChangeCompanyProfilePicture);

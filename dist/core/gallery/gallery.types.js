@@ -7,4 +7,5 @@ var EntityType;
     EntityType["ClockMeSite"] = "ClockMeSite";
     EntityType["User"] = "User";
     EntityType["Product"] = "Product";
+    EntityType["ShowcaseBanner"] = "ShowcaseBanner";
 })(EntityType || (exports.EntityType = EntityType = {}));

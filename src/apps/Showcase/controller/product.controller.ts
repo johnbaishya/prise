@@ -13,7 +13,7 @@ import { send } from "process";
 // function to create a product with ownership check
 /**
  * @swagger
- * /api/product:
+ * /api/showcase/product:
  *   post:
  *     summary: Create a new product
  *     tags: [Showcase]
@@ -79,7 +79,7 @@ export const createProduct = async (req: UserRequest, res: Response) => {
 
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/showcase/product/{id}:
  *   put:
  *     summary: Update an existing product
  *     tags: [Showcase]
@@ -152,7 +152,7 @@ export const updateProduct = async (req: UserRequest, res: Response) => {
 
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/showcase/product/{id}:
  *   delete:
  *     summary: Delete a product by ID
  *     tags: [Showcase]
@@ -196,7 +196,7 @@ export  const deleteProduct = async (req: UserRequest, res: Response) => {
 
 /**
  * @swagger
- * /api/product/{id}/gallery:
+ * /api/showcase/product/{id}/gallery:
  *   post:
  *     summary: Add gallery images to a product
  *     tags: [Showcase]
@@ -243,6 +243,41 @@ export const addProductGallery = async (req: UserRequest, res: Response) => {
 
 
 
+/**
+ * @swagger
+ * /api/showcase/product/{id}/gallery:
+ *   get:
+ *     summary: list gallery images of a product
+ *     tags: [Showcase]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: List of Gallery
+ *       400:
+ *         description: Bad request
+ *       403:
+ *         description: Forbidden
+ */
+// to get the product gallery 
+export const getProductGallery = async (req:UserRequest, res:Response)=>{
+  try {
+    const productId = req.params.id;
+    const gallery = await productService.getProductGallery(productId);
+    sendSuccessResponse(res,gallery)
+  } catch (error) {
+    sendErrorResponse(res, error);
+  }
+}
+
+
+
+
 
 
 
@@ -257,7 +292,7 @@ export const addProductGallery = async (req: UserRequest, res: Response) => {
 
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/showcase/product/{id}:
  *   get:
  *     summary: Get product details by ID
  *     tags: [Showcase]
@@ -296,7 +331,7 @@ export const getProductDetail = async (req: UserRequest, res: Response) => {
 
 /**
  * @swagger
- * /api/product/company/{id}:
+ * /api/showcase/product/company/{id}:
  *   get:
  *     summary: List products for a company
  *     tags: [Showcase]

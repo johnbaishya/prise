@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listProducts = exports.deleteProduct = exports.getProductById = exports.addProductGalleryImages = exports.updateProduct = exports.createProduct = exports.verifyProductUpdateEligibilityForUser = exports.verifyProductCreationEligibilityForUser = exports.verifyProductOwnership = exports.verifyproductOfCompany = exports.verifyProductOwnershipByProductId = void 0;
+exports.listProducts = exports.deleteProduct = exports.getProductById = exports.getProductGallery = exports.addProductGalleryImages = exports.updateProduct = exports.createProduct = exports.verifyProductUpdateEligibilityForUser = exports.verifyProductCreationEligibilityForUser = exports.verifyProductOwnership = exports.verifyproductOfCompany = exports.verifyProductOwnershipByProductId = void 0;
 const company_service_1 = require("@/core/company/company.service");
 const product_model_1 = __importDefault(require("../models/product.model"));
 const productCategory_service_1 = require("./productCategory.service");
@@ -172,6 +172,16 @@ const addProductGalleryImages = (productId, userId, imageFiles) => __awaiter(voi
     }
 });
 exports.addProductGalleryImages = addProductGalleryImages;
+const getProductGallery = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const gallery = yield (0, gallery_service_1.getGalleryImages)(gallery_types_1.EntityType.Product, productId);
+        return gallery;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.getProductGallery = getProductGallery;
 // function to get a product by id 
 const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {

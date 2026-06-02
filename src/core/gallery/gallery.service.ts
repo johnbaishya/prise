@@ -77,6 +77,9 @@ export const deleteGalleryImageAfterUserVerification = async (galleryId:string,u
             case EntityType.Company:
                 await verifyCompanyOwnershipByCompanyId(userId,entityId);
                 break;
+            case EntityType.ShowcaseBanner:
+                await verifyCompanyOwnershipByCompanyId(userId,entityId);
+                break;
             default:
                 throw new Error("We don't support this entity type for gallery images");
         }

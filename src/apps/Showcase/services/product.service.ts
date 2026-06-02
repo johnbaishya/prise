@@ -261,6 +261,18 @@ export const addProductGalleryImages = async (productId:string,userId:string,ima
 
 
 
+export const getProductGallery  = async (productId:string):Promise<IGallery[]>=>{
+  try {
+    const gallery = await getGalleryImages(EntityType.Product,productId);
+    return gallery;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+
 
 
 

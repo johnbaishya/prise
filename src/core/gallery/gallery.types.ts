@@ -5,6 +5,7 @@ export enum EntityType{
     ClockMeSite = "ClockMeSite",
     User = "User",
     Product = "Product",
+    ShowcaseBanner = "ShowcaseBanner"
 }
 
 export interface MulterImageFile extends Express.Multer.File {

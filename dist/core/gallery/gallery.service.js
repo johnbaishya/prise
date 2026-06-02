@@ -75,6 +75,9 @@ const deleteGalleryImageAfterUserVerification = (galleryId, userId) => __awaiter
             case gallery_types_1.EntityType.Company:
                 yield (0, company_service_1.verifyCompanyOwnershipByCompanyId)(userId, entityId);
                 break;
+            case gallery_types_1.EntityType.ShowcaseBanner:
+                yield (0, company_service_1.verifyCompanyOwnershipByCompanyId)(userId, entityId);
+                break;
             default:
                 throw new Error("We don't support this entity type for gallery images");
         }

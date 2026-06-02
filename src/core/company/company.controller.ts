@@ -8,6 +8,9 @@ import { EntityType } from "../gallery/gallery.types";
 import { MulterImageFile } from "../../modules/Common/types/FileTypes";
 import Gallery from "../gallery/gallery.model";
 import { deleteS3Image } from "../gallery/ImageHandler";
+import * as companyService from "./company.service";
+import { CreateCompanyDTO } from "@/Types/request/core-request";
+import { BaseListQueryDTO } from "@/Types/request/query";
 
 
 // to create a company
@@ -56,15 +59,25 @@ import { deleteS3Image } from "../gallery/ImageHandler";
  *         description: something wrong
  *     
  */
-export const addCompany = async(req:UserRequest, res:Response)=>{
-    let userId = req.user?.id;
+export const createCompany = async(req:UserRequest, res:Response)=>{
     try {
-        let company = await Company.create({user_id:userId,...req.body});
-        res.status(201).json(company)
+        const data = req.body as CreateCompanyDTO;
+        const image = req.file as MulterImageFile;
+        const userId = req.user?.id!;
+       
+        const company = await companyService.createCompany(data, userId, image);
+        sendSuccessResponse(res,company)
     } catch (error) {
-        console.log("error from add company",error);
-        res.status(500).send(error)
+        sendErrorResponse(res,error)
     }
+    // let userId = req.user?.id;
+    // try {
+    //     let company = await Company.create({user_id:userId,...req.body});
+    //     res.status(201).json(company)
+    // } catch (error) {
+    //     console.log("error from add company",error);
+    //     res.status(500).send(error)
+    // }
 }
 
 // to edit a company 
@@ -192,11 +205,13 @@ export const deleteCompany  = async(req:UserRequest,res:Response)=>{
 export const listMyCompanies = async(req:UserRequest,res:Response)=>{
     try {
         let userId = req.user?.id;
-        let companies  = await Company.find({user_id:userId});
-        res.status(200).json(companies);
+        let query = req.query as BaseListQueryDTO;
+        // let companies  = await Company.find({user_id:userId});
+        let companies = await companyService.listCompanies(userId!,query)
+        sendSuccessResponse(res,companies)
     } catch (error) {
         console.log("error from listMyCompanies",error);
-        res.status(500).send(error)
+        sendErrorResponse(res,error);
     }
 }
 
@@ -478,6 +493,6 @@ const ChangeCompanyProfilePicture = async(req:UserRequest,res:Response) =>{
     }
   }
 
-const companyController = {addCompany, deleteCompany, updateCompany,listMyCompanies,getCompanyDetail,addCompanyGallery,deleteCompanyGalleryImage,getCompanyGallery,ChangeCompanyProfilePicture};
+const companyController = {createCompany, deleteCompany, updateCompany,listMyCompanies,getCompanyDetail,addCompanyGallery,deleteCompanyGalleryImage,getCompanyGallery,ChangeCompanyProfilePicture};
 export default companyController;
 

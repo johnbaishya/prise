@@ -42,13 +42,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductsbyCompanyId = exports.getProductDetail = exports.addProductGallery = exports.deleteProduct = exports.updateProduct = exports.createProduct = void 0;
+exports.getProductsbyCompanyId = exports.getProductDetail = exports.getProductGallery = exports.addProductGallery = exports.deleteProduct = exports.updateProduct = exports.createProduct = void 0;
 const productService = __importStar(require("@/apps/Showcase/services/product.service"));
 const reqest_1 = require("@/libs/reqest");
 // function to create a product with ownership check
 /**
  * @swagger
- * /api/product:
+ * /api/showcase/product:
  *   post:
  *     summary: Create a new product
  *     tags: [Showcase]
@@ -102,7 +102,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createProduct = createProduct;
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/showcase/product/{id}:
  *   put:
  *     summary: Update an existing product
  *     tags: [Showcase]
@@ -161,7 +161,7 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.updateProduct = updateProduct;
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/showcase/product/{id}:
  *   delete:
  *     summary: Delete a product by ID
  *     tags: [Showcase]
@@ -196,7 +196,7 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.deleteProduct = deleteProduct;
 /**
  * @swagger
- * /api/product/{id}/gallery:
+ * /api/showcase/product/{id}/gallery:
  *   post:
  *     summary: Add gallery images to a product
  *     tags: [Showcase]
@@ -242,10 +242,43 @@ const addProductGallery = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.addProductGallery = addProductGallery;
+/**
+ * @swagger
+ * /api/showcase/product/{id}/gallery:
+ *   get:
+ *     summary: list gallery images of a product
+ *     tags: [Showcase]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: List of Gallery
+ *       400:
+ *         description: Bad request
+ *       403:
+ *         description: Forbidden
+ */
+// to get the product gallery 
+const getProductGallery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const productId = req.params.id;
+        const gallery = yield productService.getProductGallery(productId);
+        (0, reqest_1.sendSuccessResponse)(res, gallery);
+    }
+    catch (error) {
+        (0, reqest_1.sendErrorResponse)(res, error);
+    }
+});
+exports.getProductGallery = getProductGallery;
 // 
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/showcase/product/{id}:
  *   get:
  *     summary: Get product details by ID
  *     tags: [Showcase]
@@ -276,7 +309,7 @@ const getProductDetail = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.getProductDetail = getProductDetail;
 /**
  * @swagger
- * /api/product/company/{id}:
+ * /api/showcase/product/company/{id}:
  *   get:
  *     summary: List products for a company
  *     tags: [Showcase]

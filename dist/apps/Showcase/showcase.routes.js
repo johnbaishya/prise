@@ -9,6 +9,7 @@ const auth_1 = __importDefault(require("@/middleware/auth"));
 const productCategory_controller_1 = require("./controller/productCategory.controller");
 const uploadImage_1 = __importDefault(require("@/middleware/uploadImage"));
 const productTag_controller_1 = require("./controller/productTag.controller");
+const banner_controller_1 = require("./controller/banner.controller");
 const router = (0, express_1.Router)();
 // product routes
 router.post("/product", [auth_1.default, uploadImage_1.default.array('images')], product_controller_1.createProduct);
@@ -17,6 +18,7 @@ router.delete("/product/:id", auth_1.default, product_controller_1.deleteProduct
 router.post("/product/:id/gallery", [auth_1.default, uploadImage_1.default.array("images")], product_controller_1.addProductGallery);
 router.get("/product/:id", product_controller_1.getProductDetail);
 router.get("/company/:id/products", product_controller_1.getProductsbyCompanyId);
+router.get("/product/:id/gallery", product_controller_1.getProductGallery);
 // routes for product category
 router.post("/product-category", [auth_1.default, uploadImage_1.default.single("image")], productCategory_controller_1.createProductCategory);
 router.put("/product-category/:id", [auth_1.default, uploadImage_1.default.single("image")], productCategory_controller_1.updateProductCategory);
@@ -29,4 +31,7 @@ router.put("/product-tag/:id", [auth_1.default, uploadImage_1.default.single("im
 router.delete("/product-tag/:id", auth_1.default, productTag_controller_1.deleteProductTag);
 router.get("/company/:id/product-tag", productTag_controller_1.getProductTagsByCompanyId);
 router.get("/product-tag/:id", productTag_controller_1.getProductTagById);
+// routes for banner 
+router.post("/company/:id/banner", [auth_1.default, uploadImage_1.default.array("images")], banner_controller_1.addShowcaseBannerImages);
+router.get("/company/:id/banner", banner_controller_1.getShowcaseBannerImages);
 exports.default = router;

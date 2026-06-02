@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -12,13 +45,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCompanyDetail = exports.listMyCompanies = exports.deleteCompany = exports.updateCompany = exports.addCompany = void 0;
+exports.getCompanyDetail = exports.listMyCompanies = exports.deleteCompany = exports.updateCompany = exports.createCompany = void 0;
 const company_model_1 = __importDefault(require("./company.model"));
 const auth_1 = require("../../libs/auth");
 const reqest_1 = require("../../libs/reqest");
 const gallery_types_1 = require("../gallery/gallery.types");
 const gallery_model_1 = __importDefault(require("../gallery/gallery.model"));
 const ImageHandler_1 = require("../gallery/ImageHandler");
+const companyService = __importStar(require("./company.service"));
 // to create a company
 /**
  * @swagger
@@ -65,19 +99,28 @@ const ImageHandler_1 = require("../gallery/ImageHandler");
  *         description: something wrong
  *
  */
-const addCompany = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createCompany = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
     try {
-        let company = yield company_model_1.default.create(Object.assign({ user_id: userId }, req.body));
-        res.status(201).json(company);
+        const data = req.body;
+        const image = req.file;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const company = yield companyService.createCompany(data, userId, image);
+        (0, reqest_1.sendSuccessResponse)(res, company);
     }
     catch (error) {
-        console.log("error from add company", error);
-        res.status(500).send(error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
+    // let userId = req.user?.id;
+    // try {
+    //     let company = await Company.create({user_id:userId,...req.body});
+    //     res.status(201).json(company)
+    // } catch (error) {
+    //     console.log("error from add company",error);
+    //     res.status(500).send(error)
+    // }
 });
-exports.addCompany = addCompany;
+exports.createCompany = createCompany;
 // to edit a company 
 /**
  * @swagger
@@ -208,12 +251,14 @@ const listMyCompanies = (req, res) => __awaiter(void 0, void 0, void 0, function
     var _a;
     try {
         let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
-        let companies = yield company_model_1.default.find({ user_id: userId });
-        res.status(200).json(companies);
+        let query = req.query;
+        // let companies  = await Company.find({user_id:userId});
+        let companies = yield companyService.listCompanies(userId, query);
+        (0, reqest_1.sendSuccessResponse)(res, companies);
     }
     catch (error) {
         console.log("error from listMyCompanies", error);
-        res.status(500).send(error);
+        (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
 exports.listMyCompanies = listMyCompanies;
@@ -480,5 +525,5 @@ const ChangeCompanyProfilePicture = (req, res) => __awaiter(void 0, void 0, void
         (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
-const companyController = { addCompany: exports.addCompany, deleteCompany: exports.deleteCompany, updateCompany: exports.updateCompany, listMyCompanies: exports.listMyCompanies, getCompanyDetail: exports.getCompanyDetail, addCompanyGallery, deleteCompanyGalleryImage, getCompanyGallery, ChangeCompanyProfilePicture };
+const companyController = { createCompany: exports.createCompany, deleteCompany: exports.deleteCompany, updateCompany: exports.updateCompany, listMyCompanies: exports.listMyCompanies, getCompanyDetail: exports.getCompanyDetail, addCompanyGallery, deleteCompanyGalleryImage, getCompanyGallery, ChangeCompanyProfilePicture };
 exports.default = companyController;
