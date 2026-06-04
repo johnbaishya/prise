@@ -493,6 +493,66 @@ const ChangeCompanyProfilePicture = async(req:UserRequest,res:Response) =>{
     }
   }
 
-const companyController = {createCompany, deleteCompany, updateCompany,listMyCompanies,getCompanyDetail,addCompanyGallery,deleteCompanyGalleryImage,getCompanyGallery,ChangeCompanyProfilePicture};
+
+
+  // to change the brand logo of a company
+/**
+ * @swagger
+ * /api/company/:id/brand-logo:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: Company profile picture update
+ *     description: update the Company's profile picture.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               brand_logo:
+ *                 type: string
+ *                 format: binary # Indicates file upload in Swagger
+ *     responses:
+ *       200:
+ *         description: updated user.
+ *       401:
+ *         description: Invalid credentials.
+ *     
+ */
+const ChangeCompanyBrandLogo = async(req:UserRequest,res:Response) =>{
+    try {
+      let userId = req.user?.id;
+      let companyId = req.params.id;
+      if(!userId){
+        sendResponseWithMessage(res,400,"user not found");
+        return;
+      }
+      let company = await Company.findById(companyId);
+      if(!company){
+        sendResponseWithMessage(res,400,"company not found");
+        return;
+      }
+
+      let isowner = checkOwnership(req,res,company);
+      if(!isowner){
+        return;
+      }
+      let file = req.file;
+      if(!file){
+        return;
+      }
+      let image = file as MulterImageFile;
+      let uCompany = await Company.findByIdAndUpdate(companyId,{brand_logo:image.location},{new:true})
+      sendSuccessResponse(res,uCompany);
+    } catch (error) {
+      console.log("error from changeCompanyProfilePicture");
+      sendErrorResponse(res,error);
+    }
+  }
+
+const companyController = {createCompany, deleteCompany, updateCompany,listMyCompanies,getCompanyDetail,addCompanyGallery,deleteCompanyGalleryImage,getCompanyGallery,ChangeCompanyProfilePicture,ChangeCompanyBrandLogo};
 export default companyController;
 

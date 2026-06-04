@@ -28,6 +28,7 @@ router.post("/company", [auth_1.default, uploadImage_1.default.single("brand_log
 router.get("/company", auth_1.default, company_controller_1.default.listMyCompanies);
 router.put("/company/:id", auth_1.default, company_controller_1.default.updateCompany);
 router.post("/company/:id/profile-pic", [auth_1.default, uploadImage_1.default.single("image")], company_controller_1.default.ChangeCompanyProfilePicture);
+router.post("/company/:id/brand-logo", [auth_1.default, uploadImage_1.default.single("brand_logo")], company_controller_1.default.ChangeCompanyBrandLogo);
 router.delete("/company/:id", auth_1.default, company_controller_1.default.deleteCompany);
 router.get("/company/:id", auth_1.default, company_controller_1.default.getCompanyDetail);
 router.post("/company/:id/gallery", [auth_1.default, uploadImage_1.default.array("images")], company_controller_1.default.addCompanyGallery);

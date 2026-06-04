@@ -29,6 +29,7 @@ router.post("/company",[verifyToken,uploadImage.single("brand_logo")],companyCon
 router.get("/company",verifyToken,companyController.listMyCompanies);
 router.put("/company/:id",verifyToken,companyController.updateCompany);
 router.post("/company/:id/profile-pic",[verifyToken,uploadImage.single("image")],companyController.ChangeCompanyProfilePicture)
+router.post("/company/:id/brand-logo",[verifyToken,uploadImage.single("brand_logo")],companyController.ChangeCompanyBrandLogo)
 router.delete("/company/:id",verifyToken,companyController.deleteCompany);
 router.get("/company/:id",verifyToken,companyController.getCompanyDetail);
 router.post("/company/:id/gallery",[verifyToken,uploadImage.array("images")],companyController.addCompanyGallery)

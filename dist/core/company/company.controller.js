@@ -525,5 +525,63 @@ const ChangeCompanyProfilePicture = (req, res) => __awaiter(void 0, void 0, void
         (0, reqest_1.sendErrorResponse)(res, error);
     }
 });
-const companyController = { createCompany: exports.createCompany, deleteCompany: exports.deleteCompany, updateCompany: exports.updateCompany, listMyCompanies: exports.listMyCompanies, getCompanyDetail: exports.getCompanyDetail, addCompanyGallery, deleteCompanyGalleryImage, getCompanyGallery, ChangeCompanyProfilePicture };
+// to change the brand logo of a company
+/**
+ * @swagger
+ * /api/company/:id/brand-logo:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Common]
+ *     summary: Company profile picture update
+ *     description: update the Company's profile picture.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               brand_logo:
+ *                 type: string
+ *                 format: binary # Indicates file upload in Swagger
+ *     responses:
+ *       200:
+ *         description: updated user.
+ *       401:
+ *         description: Invalid credentials.
+ *
+ */
+const ChangeCompanyBrandLogo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        let companyId = req.params.id;
+        if (!userId) {
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "user not found");
+            return;
+        }
+        let company = yield company_model_1.default.findById(companyId);
+        if (!company) {
+            (0, reqest_1.sendResponseWithMessage)(res, 400, "company not found");
+            return;
+        }
+        let isowner = (0, auth_1.checkOwnership)(req, res, company);
+        if (!isowner) {
+            return;
+        }
+        let file = req.file;
+        if (!file) {
+            return;
+        }
+        let image = file;
+        let uCompany = yield company_model_1.default.findByIdAndUpdate(companyId, { brand_logo: image.location }, { new: true });
+        (0, reqest_1.sendSuccessResponse)(res, uCompany);
+    }
+    catch (error) {
+        console.log("error from changeCompanyProfilePicture");
+        (0, reqest_1.sendErrorResponse)(res, error);
+    }
+});
+const companyController = { createCompany: exports.createCompany, deleteCompany: exports.deleteCompany, updateCompany: exports.updateCompany, listMyCompanies: exports.listMyCompanies, getCompanyDetail: exports.getCompanyDetail, addCompanyGallery, deleteCompanyGalleryImage, getCompanyGallery, ChangeCompanyProfilePicture, ChangeCompanyBrandLogo };
 exports.default = companyController;
