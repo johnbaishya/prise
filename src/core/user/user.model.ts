@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
   profile_pic:{type:String,require:false},
   password: { type: String },
   token: { type: String },
+  username:{type:String,require:false},
+  phone:{type:String,require:false}
 });
 
 const User = mongoose.models.User||mongoose.model("User", userSchema);

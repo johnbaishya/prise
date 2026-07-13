@@ -176,6 +176,7 @@ export const userLogin = async(req:Request,res:Response)=>{
          last_name:user.last_name,
          email:user.email,
          profile_pic:user.profile_pic,
+         phone:user.phone
      };
  
        // user
@@ -219,15 +220,25 @@ export const userLogin = async(req:Request,res:Response)=>{
  */
 export const updateUser = async(req:UserRequest,res:Response)=>{
   try {
-    let {first_name,last_name}:UpdateUserReqBody = req.body;
-    let newBody = {first_name,last_name}
+    let {first_name,last_name,phone}:UpdateUserReqBody = req.body;
+    let newBody = {first_name,last_name,phone}
     let userId = req.user?.id;
     if(!userId){
       sendResponseWithMessage(res,400,"user not found");
       return;
     }
     let uUser = await User.findByIdAndUpdate(userId,newBody,{new:true})
-    sendSuccessResponse(res,uUser);
+    let userResponse:IUser = {
+      id:uUser._id,
+      first_name:uUser.first_name,
+      last_name:uUser.last_name,
+      email:uUser.email,
+      profile_pic:uUser.profile_pic,
+      phone:uUser.phone,
+      username:uUser.username
+
+    }
+    sendSuccessResponse(res,userResponse);
   } catch (error) {
     console.log("error from update User",error);
     sendErrorResponse(res,error);
@@ -383,13 +394,12 @@ export const googleLogin = async(req:Request,res:Response)=>{
      const token  = createToken(params);
        // save user token
        user.token = token;
-       let newUser  = {
+       let newUser:IUser = {
          id:user.id,
          first_name:user.first_name,
          last_name:user.last_name,
          email:user.email,
          profile_pic:user.profile_pic,
-         role:user.role,
      };
      
      const newResponse = {

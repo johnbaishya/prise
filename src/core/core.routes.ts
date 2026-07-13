@@ -19,7 +19,7 @@ router.post("/user/register",userRegister);
 router.post("/user/login",userLogin);
 router.post("/user/google-login",googleLogin)
 router.post("/user/facebook-login",facebookLogin)
-router.post("/user/profile-pic",[verifyToken,uploadImage.single("image")],ChangeUserProfilePicture)
+router.post("/user/profile-pic",[verifyToken,uploadImage.single("profile_pic")],ChangeUserProfilePicture)
 router.put("/user/profile",verifyToken,updateUser)
 router.get("/user/profile",verifyToken,getUser)
 

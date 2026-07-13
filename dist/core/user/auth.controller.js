@@ -159,6 +159,7 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 last_name: user.last_name,
                 email: user.email,
                 profile_pic: user.profile_pic,
+                phone: user.phone
             };
             // user
             res.status(200).json({ user: newUser, token });
@@ -203,15 +204,24 @@ exports.userLogin = userLogin;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        let { first_name, last_name } = req.body;
-        let newBody = { first_name, last_name };
+        let { first_name, last_name, phone } = req.body;
+        let newBody = { first_name, last_name, phone };
         let userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
         if (!userId) {
             (0, reqest_1.sendResponseWithMessage)(res, 400, "user not found");
             return;
         }
         let uUser = yield user_model_1.default.findByIdAndUpdate(userId, newBody, { new: true });
-        (0, reqest_1.sendSuccessResponse)(res, uUser);
+        let userResponse = {
+            id: uUser._id,
+            first_name: uUser.first_name,
+            last_name: uUser.last_name,
+            email: uUser.email,
+            profile_pic: uUser.profile_pic,
+            phone: uUser.phone,
+            username: uUser.username
+        };
+        (0, reqest_1.sendSuccessResponse)(res, userResponse);
     }
     catch (error) {
         console.log("error from update User", error);
@@ -366,7 +376,6 @@ const googleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             last_name: user.last_name,
             email: user.email,
             profile_pic: user.profile_pic,
-            role: user.role,
         };
         const newResponse = {
             user: newUser,

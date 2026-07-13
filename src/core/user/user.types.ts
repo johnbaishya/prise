@@ -9,5 +9,7 @@ export interface IUser {
     last_name: string;
     email: string;
     profile_pic?:string;
+    phone?:string;
+    username?:string;
 }
 

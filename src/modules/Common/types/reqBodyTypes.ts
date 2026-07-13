@@ -1,9 +1,10 @@
 export type UpdateUserReqBody = {
-    first_name:String,
-    last_name:String,
+    first_name:string,
+    last_name:string,
+    phone:string,
 }
 
 export type AddGalleryReqBody = {
-    entityType:String,
-    entityId:String,
+    entityType:string,
+    entityId:string,
 }

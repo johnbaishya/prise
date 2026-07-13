@@ -11,6 +11,8 @@ const userSchema = new mongoose_1.default.Schema({
     profile_pic: { type: String, require: false },
     password: { type: String },
     token: { type: String },
+    username: { type: String, require: false },
+    phone: { type: String, require: false }
 });
 const User = mongoose_1.default.models.User || mongoose_1.default.model("User", userSchema);
 exports.default = User;
